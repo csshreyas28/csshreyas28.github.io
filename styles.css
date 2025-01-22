@@ -1,0 +1,261 @@
+/* Base Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #141414;
+    color: white;
+    transition: background 0.3s, color 0.3s;
+    padding-top: 40px; /* Adding padding on top to ensure content doesn't touch the top of the page */
+  }
+  
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+    box-sizing: border-box;
+  }
+  
+  /* Grid Items with Custom Sizes */
+  .profile {
+    grid-column: span 2; /* Span 2 columns */
+    grid-row: span 2;    /* Span 2 rows */
+    background: #333;
+  }
+  
+  .skills {
+    grid-column: span 1; /* Span 1 column */
+    grid-row: span 2;    /* Span 2 rows */
+    background: #444;
+  }
+  
+  .resume {
+    grid-column: span 1; /* Span 1 column */
+    grid-row: span 1;    /* Span 1 row */
+    background: #555;
+  }
+  
+  .linkedin {
+    grid-column: span 1; /* Span 1 column */
+    grid-row: span 1;    /* Span 1 row */
+    background: #0077B5; /* LinkedIn Blue */
+  }
+  
+  .github {
+    grid-column: span 1; /* Span 1 column */
+    grid-row: span 1;    /* Span 1 row */
+    background: #333; /* GitHub Dark Background */
+  }
+  
+  .services {
+    grid-column: span 2; /* Span 2 columns */
+    grid-row: span 1;    /* Span 1 row */
+    background: #444;
+  }
+  
+  .experience {
+    grid-column: span 2; /* Span 2 columns */
+    grid-row: span 1;    /* Span 1 row */
+    background: #555;
+  }
+  
+  /* General Grid Styles */
+  .profile, .skills, .resume, .services, .experience, .linkedin, .github {
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    color: white; /* Ensure all text inside grids are white in dark mode */
+    transition: background 0.3s, color 0.3s;
+  }
+  
+  /* LinkedIn Grid */
+  .linkedin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .linkedin img {
+    width: 60px;
+    height: 60px;
+  }
+  
+  /* GitHub Grid */
+  .github {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .github img {
+    width: 60px;
+    height: 60px;
+  }
+  
+  /* Skills Section Progress Bars */
+  .skills .progress-bar {
+    background: #444;
+    height: 5px;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  
+  .skills .progress {
+    background: #FF758C;
+    height: 100%;
+  }
+  
+  .resume {
+    text-align: center;
+  }
+  
+  .services, .experience {
+    text-align: left;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  a img {
+    border-radius: 50%;
+  }
+  
+  /* Mode Switch */
+  .mode-switch {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100; /* Ensures it stays on top of content */
+  }
+  
+  .mode-switch input[type="checkbox"] {
+    display: none;
+  }
+  
+  .mode-switch label {
+    width: 40px;
+    height: 20px;
+    background-color: #ddd;
+    border-radius: 50px;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+  
+  .mode-switch label::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    background-color: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s;
+  }
+  
+  .mode-switch label .icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    transition: opacity 0.3s;
+  }
+  
+  /* Positioning Moon and Sun Icons */
+  .mode-switch input[type="checkbox"]:checked + label .sun-icon {
+    opacity: 1;
+  }
+  
+  .mode-switch input[type="checkbox"]:not(:checked) + label .moon-icon {
+    opacity: 1;
+  }
+  
+  .mode-switch input[type="checkbox"]:checked + label .moon-icon {
+    opacity: 0;
+  }
+  
+  .mode-switch input[type="checkbox"]:not(:checked) + label .sun-icon {
+    opacity: 0;
+  }
+  
+  .mode-switch input[type="checkbox"]:checked + label::before {
+    transform: translateX(20px);
+  }
+  
+  .mode-switch input[type="checkbox"]:checked + label {
+    background-color: #FFD700;
+  }
+  
+  /* Dark Mode */
+  body.dark-mode {
+    background: #141414;
+    color: white;
+  }
+  
+  body.dark-mode .profile,
+  body.dark-mode .skills,
+  body.dark-mode .resume,
+  body.dark-mode .services,
+  body.dark-mode .experience {
+    background: #333;
+  }
+  
+  body.dark-mode .linkedin {
+    background: #0077B5; /* LinkedIn Blue */
+  }
+  
+  body.dark-mode .github {
+    background: #333; /* GitHub Dark Background */
+  }
+  
+  /* Light Mode */
+  body.light-mode {
+    background: #f4f4f4;
+    color: #333;
+  }
+  
+  body.light-mode .profile,
+  body.light-mode .skills,
+  body.light-mode .resume,
+  body.light-mode .services,
+  body.light-mode .experience {
+    background: #fff;
+    color: #333; /* Explicitly set font color to black in light mode */
+  }
+  
+  body.light-mode .linkedin {
+    background: #0077B5; /* LinkedIn Blue */
+  }
+  
+  body.light-mode .github {
+    background: #333; /* GitHub Dark Background */
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .bento-grid {
+      grid-template-columns: repeat(2, 1fr); /* Switch to 2 columns for medium screens */
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .bento-grid {
+      grid-template-columns: 1fr; /* Switch to 1 column for small screens */
+    }
+    
+    .mode-switch {
+      top: 10px;
+      right: 10px;
+    }
+  
+    .profile, .skills, .resume, .services, .experience, .linkedin, .github {
+      padding: 15px;
+    }
+  }
+  
