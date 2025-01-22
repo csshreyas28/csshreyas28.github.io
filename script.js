@@ -3,17 +3,12 @@ const modeToggle = document.getElementById('mode-toggle');
 const moonIcon = document.getElementById('moon-icon');
 const sunIcon = document.getElementById('sun-icon');
 
-// Check the current mode and set accordingly
-if (localStorage.getItem('theme') === 'dark') {
-  document.body.classList.add('dark-mode');
-  modeToggle.checked = true;
-  moonIcon.style.display = 'block';
-  sunIcon.style.display = 'none';
-} else {
-  document.body.classList.add('light-mode');
-  moonIcon.style.display = 'none';
-  sunIcon.style.display = 'block';
-}
+// Set default theme to dark mode when the page loads
+document.body.classList.add('dark-mode');
+modeToggle.checked = true;
+moonIcon.style.display = 'block';
+sunIcon.style.display = 'none';
+localStorage.setItem('theme', 'dark'); // Ensure dark mode is saved
 
 // Switch between dark and light mode
 modeToggle.addEventListener('change', () => {
