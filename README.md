@@ -4,9 +4,9 @@ Welcome to my portfolio website! This repo contains the source code for my perso
 
 ---
 
-## Live Demo
+## Live
 
-You can view the live version of the website here: [Link to live website]
+You can view the live version of the website here: [Link to live website](https://csshreyas28.github.io/)
 
 ---
 
@@ -15,7 +15,6 @@ You can view the live version of the website here: [Link to live website]
 - HTML
 - CSS
 - JavaScript
-- [Any other tools or frameworks you used]
 
 ---
 
@@ -24,7 +23,7 @@ You can view the live version of the website here: [Link to live website]
 To run this website locally, follow these steps:
 
 1. Clone the repository:
-git clone https://github.com/your-username/portfolio.git
+git clone https://github.com/csshreyas28/csshreyas28.github.io
 
 2. Open the project folder and launch the `index.html` file in your browser.
 
@@ -34,6 +33,6 @@ git clone https://github.com/your-username/portfolio.git
 
 Feel free to reach out to me!
 
-- **LinkedIn**: [[LinkedIn](https://www.linkedin.com/in/csshreyas/)]
+- [[LinkedIn](https://www.linkedin.com/in/csshreyas/)]
 
-- **Website**: [[website link](https://csshreyas28.github.io/)]
+- [[website link](https://csshreyas28.github.io/)]
