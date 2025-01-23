@@ -80,7 +80,7 @@ body {
     width: 150px; /* Adjust size as needed */
     height: 150px;
     border-radius: 50%; /* Make the image circular */
-    border: 10px solid #555; /* Default border color for light mode */
+    border: 6px solid #555; /* Default border color for light mode */
     transition: border-color 0.3s ease; /* Smooth transition when switching modes */
     transition: transform 0.3s ease; /* Add smooth transition for zoom effect */
   }
