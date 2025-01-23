@@ -8,13 +8,12 @@
     <link rel="icon" href="https://pngimg.com/d/letter_s_PNG18.png" type="image/x-icon">
   </head>
   <body>
-    <!-- Main Container -->
     <div class="bento-grid">
-      <!-- Profile Section -->
-      <div class="profile">
-        <h1>Hey, I'm Shreyas!</h1>
-        <p>A creative individual with a passion for innovation, aiming to contribute skills and expertise to an exceptional organization. Dedicated to honing professional abilities, meeting organizational needs, and driving impactful outcomes.</p>
-      </div>
+        <!-- Profile Section -->
+        <div class="profile">
+          <h1>Hey.</h1><h1>I'm Shreyas!</h1>
+          <!-- <p>A creative individual with a passion for innovation, aiming to contribute skills and expertise to an exceptional organization. Dedicated to honing professional abilities, meeting organizational needs, and driving impactful outcomes.</p> -->
+        </div>  
 
       <!-- Portfolio Picture Section -->
       <div class="portfoliopicture">
@@ -35,6 +34,23 @@
         </a>
       </div>
 
+          <!-- About Me Section -->
+          <div class="about-me">
+            <h2>About Me</h2>
+            <p class="about-text" id="aboutText">
+                I'm a passionate software engineer with hands-on experience in full-stack development. <br> 
+                My expertise spans the MEAN/MERN stack, including Angular, React, MongoDB, Express.js, and Node.js, 
+                as well as Python, C, C++, and various front-end technologies. <br> 
+                During my recent internship, I focused on developing and optimizing applications, <br> 
+                including creating an Angular component library that improved widget integration and deployment efficiency. <br>
+                I’ve also worked on projects like an AI-powered image generation tool and a mobile app for library management, 
+                demonstrating my ability to solve complex problems and deliver innovative solutions. <br>
+                Beyond coding, I’ve also led and coordinated technical and cultural events, developing strong leadership and communication skills. <br>
+                I’m eager to apply my skills and enthusiasm to impactful projects and collaborate with forward-thinking teams.
+              </p>
+            <button class="read-more" id="readMoreBtn" onclick="toggleReadMore()">Read More</button>
+          </div>
+    
       <!-- Skills Section -->
       <div class="skills">
         <h2>Skills</h2>
@@ -69,8 +85,8 @@
 
 <!-- Footer -->
 <footer class="footer">
-    <p class="left">&copy; <span class="year"></span> Shreyas C.S. All rights reserved.</p>
-    <p class="right">Site under modification. Stay tuned for updates!</p>
+    <p class="left">Site under modification. Stay tuned for updates!</p>
+    <p class="right">&copy; <span class="year"></span> Shreyas C.S. All rights reserved.</p>
     <!-- Dark/Light Mode Switch inside Footer -->
     <div class="mode-switch-footer">
         <input type="checkbox" id="mode-toggle">

@@ -26,19 +26,98 @@ body {
     background: #333;
   }
   
-  .skills {
-    grid-column: span 3; /* Span 3 columns */
-    grid-row: span 1;    /* Span 1 row*/
-    background: #444;
-    color: white;
+  /* Base Styles for About Me */
+.about-me {
+    grid-column: span 3;
+    background: #333; /* Dark background by default */
+    color: white;     /* White text in dark mode */
     padding: 20px;
     border-radius: 10px;
+    transition: background 0.3s ease, color 0.3s ease; /* Smooth transition for background and text color */
   }
   
+  .about-me h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .about-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 7; /* Show only 7 lines initially */
+    line-clamp: 7; /* Standard property for compatibility */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 10px;
+  } 
+  
+  .read-more {
+    background: #555;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .read-more:hover {
+    background: #666;
+  }
+  
+/* Light Mode Styling */
+body.light-mode .about-me {
+    background: #ffffff;  /* Set the background to white in light mode */
+    color: #333;           /* Dark text in light mode */
+  }
+  
+  body.light-mode .read-more {
+    background: #ddd;     /* Light background for the button */
+  }
+  
+  body.light-mode .read-more:hover {
+    background: #ccc;     /* Slightly darker on hover */
+  }
+  
+/* Dark Mode Styling */
+body.dark-mode .read-more {
+    background: #555;  /* Dark background for the button in dark mode */
+    color: white;      /* White text on the button */
+  }
+  
+  body.dark-mode .read-more:hover {
+    background: #666;  /* Slightly lighter on hover in dark mode */
+  }
+  
+  /* Light Mode Styling */
+  body.light-mode .read-more {
+    background: #ddd;  /* Light background for the button in light mode */
+    color: #333;       /* Dark text on the button in light mode */
+  }
+  
+  body.light-mode .read-more:hover {
+    background: #ccc;  /* Slightly darker on hover in light mode */
+  }
+  
+  /* Ensure Read More Button has space */
+  .read-more:focus {
+    outline: none;
+  }
+  
+.skills {
+  grid-column: span 2;  /* Ensure this spans 2 columns */
+  grid-row: span 1;      /* Ensure this spans 1 row */
+  background: #444;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: left;      /* Ensure text is aligned to the left */
+}
+
   .skills h2 {
     margin-bottom: 20px;
     font-size: 24px;
-    text-align: center;
+    /* text-align: center; */
   }
   
   .skill-list {
@@ -54,7 +133,7 @@ body {
     border-radius: 20px;
     font-size: 14px;
     margin: 0; /* Remove default margin */
-    text-align: center;
+    /* text-align: center; */
     white-space: nowrap; /* Prevent text from wrapping */
     cursor: default; /* Optional: Makes pills non-clickable */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add subtle shadow for effect */
@@ -138,8 +217,13 @@ body {
   .linkedin img {
     width: 60px;
     height: 60px;
+    transition: transform 0.3s ease; /* Add smooth transition for zoom effect */
   }
   
+  .linkedin img:hover {
+    transform: scale(1.3); /* Slight zoom effect when hovered */
+  }
+
   /* GitHub Grid */
   .github {
     display: flex;
@@ -150,8 +234,13 @@ body {
   .github img {
     width: 60px;
     height: 60px;
+    transition: transform 0.3s ease; /* Add smooth transition for zoom effect */
   }
   
+  .github img:hover {
+    transform: scale(1.3); /* Slight zoom effect when hovered */
+  }
+
   /* Skills Section Progress Bars */
   .skills .progress-bar {
     background: #444;
@@ -181,6 +270,7 @@ body {
   a img {
     border-radius: 50%;
   }
+
   /* Footer Styles */
 footer.footer {
     position: sticky;

@@ -31,3 +31,17 @@ modeToggle.addEventListener('change', () => {
 const yearSpan = document.querySelector('.year');
 const currentYear = new Date().getFullYear();
 yearSpan.textContent = currentYear;
+
+function toggleReadMore() {
+    const aboutText = document.getElementById('aboutText');
+    const readMoreBtn = document.getElementById('readMoreBtn');
+  
+    if (aboutText.style.webkitLineClamp === '7') {
+      aboutText.style.webkitLineClamp = 'unset'; // Expand the text
+      readMoreBtn.textContent = 'Read Less';
+    } else {
+      aboutText.style.webkitLineClamp = '7'; // Collapse the text
+      readMoreBtn.textContent = 'Read More';
+    }
+  }
+  
