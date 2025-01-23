@@ -95,6 +95,18 @@
             <span id="sun-icon" class="icon sun-icon">&#127774;</span>
         </label>
     </div>
+    <div id="visit-count">
+        Loading visit count...
+      </div>
+      
+      <script>
+        fetch('counter.json')
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById('visit-count').textContent = "Page visits: " + data.visitCount;
+          });
+      </script>
+      
 </footer>
 
     <script src="script.js"></script>
