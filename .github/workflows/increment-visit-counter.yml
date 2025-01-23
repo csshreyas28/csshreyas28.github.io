@@ -1,0 +1,36 @@
+name: Increment Visit Counter
+
+on:
+  schedule:
+    - cron: "*/2 * * * *"  # This will run the Action every minute
+  workflow_dispatch: # This allows you to manually trigger the action
+
+jobs:
+  update-visit-counter:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Git user
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+
+    - name: Read and increment visit counter
+      run: |
+        # Read the current counter from counter.json
+        counter=$(jq .visitCount counter.json)
+        # Increment the counter by 1
+        new_counter=$((counter + 1))
+        # Update the counter.json file with the new count
+        jq ".visitCount = $new_counter" counter.json > temp.json && mv temp.json counter.json
+
+    - name: Commit and push updated counter
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}  # Use the token from GitHub Secrets
+      run: |
+        git add counter.json
+        git commit -m "Increment visit counter"
+        git push https://github.com/${{ github.repository }}.git HEAD:${{ github.ref }} --force
