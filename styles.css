@@ -176,8 +176,8 @@ body.dark-mode .read-more {
   }
   
   .portfoliopicture img {
-    width: 150px; /* Adjust size as needed */
-    height: 150px;
+    width: 100px; /* Adjust size as needed */
+    height: 100px;
     border-radius: 50%; /* Make the image circular */
     border: 6px solid #555; /* Default border color for light mode */
     transition: border-color 0.3s ease; /* Smooth transition when switching modes */
@@ -204,13 +204,60 @@ body.dark-mode .read-more {
     grid-row: span 1;    /* Span 1 row */
     background: #333; /* GitHub Dark Background */
   }
-  
+
   .projects {
-    grid-column: span 3; /* Span 2 columns */
-    grid-row: span 1;    /* Span 1 row */
-    background: #444;
-  }
-  
+    display: grid; /* Enable grid layout */
+    grid-template-columns: repeat(3, 1fr); /* 3 columns layout */
+    gap: 20px; /* Space between items */
+    /* background: #444; */
+    padding: 5px; /* Add some padding to the container */
+    grid-column: span 3; /* Make the projects section span 2 columns */
+}
+
+.project-item {
+    background-color: #333;
+    border-radius: 10px;
+    padding: 5px;
+    text-align: center; /* Center the content within the item */
+}
+
+.projects h2 {
+    grid-column: span 3; /* Make the title span all columns */
+    color: #fff; /* Title color */
+    text-align: center; /* Center align the title */
+    margin-bottom: 20px; /* Space below the title */
+}
+
+.project-image img {
+    width: 100%; /* Ensure the image takes full width of the container */
+    max-width: 200px; /* Prevent the image from growing too large */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 10px;
+    transition: transform 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.project-title h3 {
+    color: #fff;
+    margin-top: 10px; /* Space between the image and title */
+}
+
+.project-image:hover img {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+/* Responsiveness: Stack columns on smaller screens */
+@media (max-width: 768px) {
+    .projects {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns for medium screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .projects {
+        grid-template-columns: 1fr; /* 1 column for very small screens */
+    }
+}
+
   .experience {
     grid-column: span 2; /* Span 2 columns */
     grid-row: span 1;    /* Span 1 row */
@@ -427,13 +474,17 @@ body.light-mode footer.footer p {
   body.dark-mode .github {
     background: #333; /* GitHub Dark Background */
   }
-  
+
+  body.dark-mode h2 {
+    color: white; /* Set h2 color for dark mode */
+}
+
   /* Light Mode */
   body.light-mode {
     background: #f4f4f4;
     color: #333;
   }
-  
+
   body.light-mode .profile,
   body.light-mode .skills,
   body.light-mode .portfoliopicture,
@@ -450,6 +501,10 @@ body.light-mode footer.footer p {
   body.light-mode .github {
     background: #333; /* GitHub Dark Background */
   }
+  
+  body.light-mode h2 {
+    color: #333; /* Set h2 color for light mode */
+}
   
   /* Responsive Design */
   @media (max-width: 1024px) {
