@@ -21,20 +21,72 @@ body {
   /* Grid Items with Custom Sizes */
   .profile {
     grid-column: span 2; /* Span 2 columns */
-    grid-row: span 2;    /* Span 2 rows */
+    grid-row: span 1;    
     background: #333;
   }
   
   .skills {
-    grid-column: span 1; /* Span 1 column */
-    grid-row: span 2;    /* Span 2 rows */
+    grid-column: span 3; /* Span 3 columns */
+    grid-row: span 1;    /* Span 1 row*/
     background: #444;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
   }
   
-  .resume {
+  .skills h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center;
+  }
+  
+  .skill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Add space between pills */
+  }
+  
+  .skill-list p {
+    background: #555; /* Dark background for pills */
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    margin: 0; /* Remove default margin */
+    text-align: center;
+    white-space: nowrap; /* Prevent text from wrapping */
+    cursor: default; /* Optional: Makes pills non-clickable */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add subtle shadow for effect */
+    transition: transform 0.2s;
+  }
+  
+  .skill-list p:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+    background: #666; /* Optional: Darker shade on hover */
+  }
+  
+  .portfoliopicture {
     grid-column: span 1; /* Span 1 column */
     grid-row: span 1;    /* Span 1 row */
     background: #555;
+    display: flex; /* Use flexbox for centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    border-radius: 10px;
+    padding: 10px;
+  }
+  
+  .portfoliopicture img {
+    width: 150px; /* Adjust size as needed */
+    height: 150px;
+    border-radius: 50%; /* Make the image circular */
+    border: 3px solid #555; /* Default border color for light mode */
+    transition: border-color 0.3s ease; /* Smooth transition when switching modes */
+  }
+  
+  /* Dark Mode Specific Styles */
+  body.dark-mode .portfoliopicture img {
+    border-color: #fff; /* Change border color for dark mode */
   }
   
   .linkedin {
@@ -50,7 +102,7 @@ body {
   }
   
   .projects {
-    grid-column: span 2; /* Span 2 columns */
+    grid-column: span 3; /* Span 2 columns */
     grid-row: span 1;    /* Span 1 row */
     background: #444;
   }
@@ -62,7 +114,7 @@ body {
   }
   
   /* General Grid Styles */
-  .profile, .skills, .resume, .projects, .experience, .linkedin, .github {
+  .profile, .skills, .portfoliopicture, .projects, .experience, .linkedin, .github {
     border-radius: 10px;
     padding: 20px;
     text-align: center;
@@ -107,7 +159,7 @@ body {
     height: 100%;
   }
   
-  .resume {
+  .portfoliopicture {
     text-align: center;
   }
   
@@ -200,7 +252,7 @@ body {
   
   body.dark-mode .profile,
   body.dark-mode .skills,
-  body.dark-mode .resume,
+  body.dark-mode .portfoliopicture,
   body.dark-mode .projects,
   body.dark-mode .experience {
     background: #333;
@@ -222,7 +274,7 @@ body {
   
   body.light-mode .profile,
   body.light-mode .skills,
-  body.light-mode .resume,
+  body.light-mode .portfoliopicture,
   body.light-mode .projects,
   body.light-mode .experience {
     background: #fff;
@@ -254,7 +306,7 @@ body {
       right: 10px;
     }
   
-    .profile, .skills, .resume, .projects, .experience, .linkedin, .github {
+    .profile, .skills, .portfoliopicture, .projects, .experience, .linkedin, .github {
       padding: 15px;
     }
   }
