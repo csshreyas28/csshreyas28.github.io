@@ -44,4 +44,34 @@ function toggleReadMore() {
       readMoreBtn.textContent = 'Read More';
     }
   }
-  
+  // Typewriter effect
+const typewriterText = ["Hey.\nI'm Shreyas!"]; // Include both lines as one entry
+const typewriterElement = document.getElementById("typewriter");
+
+let charIndex = 0;
+let isDeleting = false;
+
+function typewriterEffect() {
+  const currentText = typewriterText[0];
+  const displayedText = isDeleting
+    ? currentText.substring(0, charIndex--)
+    : currentText.substring(0, charIndex++);
+
+  typewriterElement.innerHTML = displayedText.replace(/\n/g, "<br>"); // Handle new lines
+
+  if (!isDeleting && charIndex === currentText.length) {
+    // Pause before deleting
+    setTimeout(() => (isDeleting = true), 1000);
+  } else if (isDeleting && charIndex === 0) {
+    // Pause before restarting
+    isDeleting = false;
+    setTimeout(typewriterEffect, 500); // Add a short delay before restarting
+    return;
+  }
+
+  const typingSpeed = isDeleting ? 100 : 150; // Adjust typing and deleting speeds
+  setTimeout(typewriterEffect, typingSpeed);
+}
+
+// Start the typewriter effect
+typewriterEffect();

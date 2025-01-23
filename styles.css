@@ -20,12 +20,31 @@ body {
   }
   
   /* Grid Items with Custom Sizes */
+
   .profile {
     grid-column: span 2; /* Span 2 columns */
-    grid-row: span 1;    
+    grid-row: span 1; /* Span 1 row */
     background: #333;
-  }
-  
+    padding: 20px; /* Ensure padding doesn't cause overflow */
+    box-sizing: border-box;
+    height: auto; /* Let the height adjust dynamically */
+    overflow: hidden; /* Prevent content overflow */
+    display: flex; /* Use flexbox for alignment */
+    justify-content: flex-start; /* Align items to the left */
+    align-items: center; /* Vertically center the content */
+}
+
+.profile h1 {
+    font-size: 2rem; /* Adjust font size to fit within the space */
+    font-family: 'Courier New', Courier, monospace; /* Typewriter-like font */
+    white-space: nowrap; /* Prevent wrapping */
+    overflow: hidden;
+    margin: 0; /* Remove default margin */
+    text-align: left; /* Make sure text stays left aligned */
+    padding-left: 60px;
+}
+
+
   /* Base Styles for About Me */
 .about-me {
     grid-column: span 3;
