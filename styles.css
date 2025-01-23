@@ -1,12 +1,13 @@
 /* Base Styles */
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
     background: #141414;
     color: white;
     transition: background 0.3s, color 0.3s;
     padding-top: 40px; /* Adding padding on top to ensure content doesn't touch the top of the page */
   }
+ 
   
   .bento-grid {
     display: grid;
