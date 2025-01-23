@@ -26,3 +26,8 @@ modeToggle.addEventListener('change', () => {
     localStorage.setItem('theme', 'light');
   }
 });
+
+// Set the year dynamically
+const yearSpan = document.querySelector('.year');
+const currentYear = new Date().getFullYear();
+yearSpan.textContent = currentYear;
