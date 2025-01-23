@@ -98,7 +98,7 @@ body {
   .linkedin {
     grid-column: span 1; /* Span 1 column */
     grid-row: span 1;    /* Span 1 row */
-    background: #0077B5; /* LinkedIn Blue */
+    background: #0274b3; /* LinkedIn Blue */
   }
   
   .github {
