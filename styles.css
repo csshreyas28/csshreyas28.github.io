@@ -258,6 +258,65 @@ body.dark-mode .read-more {
     }
 }
 
+.snake-game {
+  grid-column: span 3; /* Span 3 columns */
+  grid-row: span 1;    /* Span 1 row */
+  background: #333;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.snake-game h2 {
+  color: white;
+  margin-bottom: 20px;
+}
+
+#gameCanvas {
+  background: #000;
+  display: block;
+  margin: 0 auto;
+  border: 1px solid #fff;
+}
+
+.game-controls {
+  margin-top: 20px;
+}
+
+.game-controls button {
+  background: #555;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 10px;
+  transition: background-color 0.3s ease;
+}
+
+.game-controls button:hover {
+  background: #666;
+}
+
+/* Light Mode Styling */
+body.light-mode .snake-game {
+  background: #fff;
+  color: #333;
+}
+
+body.light-mode #gameCanvas {
+  border: 1px solid #333;
+}
+
+body.light-mode .game-controls button {
+  background: #ddd;
+  color: #333;
+}
+
+body.light-mode .game-controls button:hover {
+  background: #ccc;
+}
+
   .experience {
     grid-column: span 2; /* Span 2 columns */
     grid-row: span 1;    /* Span 1 row */
@@ -527,4 +586,3 @@ body.light-mode footer.footer p {
       padding: 15px;
     }
   }
-  
