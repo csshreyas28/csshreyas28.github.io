@@ -75,3 +75,18 @@ function typewriterEffect() {
 
 // Start the typewriter effect
 typewriterEffect();
+
+function initMap() {
+  const karnatakaCoords = { lat: 15.3173, lng: 75.7139 }; // Center of Karnataka
+  const map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 7, // Adjust zoom level
+    center: karnatakaCoords,
+  });
+
+  // Optional: Add a marker for Karnataka
+  new google.maps.Marker({
+    position: karnatakaCoords,
+    map: map,
+    title: "Karnataka",
+  });
+}
