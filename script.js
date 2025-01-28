@@ -76,17 +76,16 @@ function typewriterEffect() {
 // Start the typewriter effect
 typewriterEffect();
 
-function initMap() {
-  const karnatakaCoords = { lat: 15.3173, lng: 75.7139 }; // Center of Karnataka
-  const map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 7, // Adjust zoom level
-    center: karnatakaCoords,
-  });
+// Initialize the map
+const map = L.map('map').setView([15.3173, 75.7139], 7); // Centered on Karnataka
 
-  // Optional: Add a marker for Karnataka
-  new google.maps.Marker({
-    position: karnatakaCoords,
-    map: map,
-    title: "Karnataka",
-  });
-}
+// Add OpenStreetMap tiles
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+}).addTo(map);
+
+// Add a marker to the map
+L.marker([15.3173, 75.7139])
+  .addTo(map)
+  .bindPopup('Karnataka, India') 
+  .openPopup();

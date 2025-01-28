@@ -16,11 +16,8 @@
 
     gtag('config', 'G-R46004V2RZ');
     </script>
-<script
-src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"
-async
-defer
-></script>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   </head>
   <body>
@@ -79,6 +76,14 @@ defer
         </div>
       </div>
 
+        <!-- Experience Section -->
+  <div class="experience">
+    <h3>I'm from...</h3>
+    <div id="map"></div>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="scripts.js"></script> 
+
      <!-- Projects Section -->
 <div class="projects">
   <h2>My Projects</h2>
@@ -125,12 +130,6 @@ defer
       </div>
   </div>
 </div>    
-
-<!-- Experience Section -->
-<div class="experience">
-  <h3>I'm at...</h3>
-  <div id="map"></div>
-</div>
 
     </div>
 

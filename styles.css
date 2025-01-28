@@ -258,19 +258,37 @@ body.dark-mode .read-more {
     }
 }
 
+/* Styling for the experience section */
 .experience {
-  grid-column: span 2; /* Span 2 columns */
-  grid-row: span 1;    /* Span 1 row */
-  background: #555;
-  position: relative;
+  grid-column: span 2;    /* Span 2 columns */
+  display: flex;          /* Ensures proper layout handling */
+  flex-direction: column; /* Stacks elements vertically */
+  background: #555;       /* Background color */
+  padding: 20px;          /* Padding inside the container */
+  border-radius: 10px;    /* Rounded corners */
+  overflow: hidden;       /* Prevents content spilling outside */
+  position: relative;     /* Keeps the section within the layout flow */
+  z-index: 0;             /* Prevents overlap issues */
+  box-sizing: border-box; /* Ensures padding doesn't increase total size */
 }
 
+/* Styling for the heading */
+.experience h3 {
+  color: white;           /* Text color */
+  margin-bottom: 10px;    /* Space below the heading */
+}
+
+/* Styling for the map container */
 #map {
-  width: 100%;
-  height: 400px; /* Adjust as needed */
-  border-radius: 10px; /* Rounded corners for the map */
+  height: 300px;          /* Fixed height */
+  width: 100%;            /* Full width of the container */
+  border-radius: 10px;    /* Rounded corners */
+  margin-top: 10px;       /* Space below the heading */
+  position: relative;     /* Keeps map positioned inside its parent */
+  z-index: 1;             /* Ensures map doesn't overlap other elements */
 }
 
+  
   
   /* General Grid Styles */
   .profile, .skills, .portfoliopicture, .projects, .experience, .linkedin, .github {
@@ -437,6 +455,16 @@ body.dark-mode footer.footer p {
 
 body.light-mode footer.footer p {
     color: #333;
+}
+
+/* Dark Mode */
+body.dark-mode .experience h3 {
+  color: white; /* Text color in dark mode */
+}
+
+/* Light Mode */
+body.light-mode .experience h3 {
+  color: #333; /* Text color in light mode */
 }
 
 /* Responsive Design for Footer */
