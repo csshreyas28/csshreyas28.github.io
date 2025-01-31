@@ -221,34 +221,11 @@ body.dark-mode .read-more {
     text-align: center; /* Center the content within the item */
     position: relative; /* Ensure the details are positioned correctly */
     overflow: hidden; /* Hide overflow for the transition effect */
-    transition: transform 0.3s ease; /* Smooth transition for hover effect */
 }
 
-.project-item:hover {
-    transform: scale(1.05); /* Slight zoom effect on hover */
-}
-
-.project-details {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 20px;
-    box-sizing: border-box;
-    transition: top 0.3s ease; /* Smooth transition for the wipe effect */
-}
-
-.project-item:hover .project-details {
-    top: 0; /* Slide the details up to reveal them */
-}
-
-.projects h2 {
-    grid-column: span 3; /* Make the title span all columns */
-    color: #fff; /* Title color */
-    text-align: center; /* Center align the title */
-    margin-bottom: 20px; /* Space below the title */
+.project-image {
+    position: relative;
+    overflow: hidden;
 }
 
 .project-image img {
@@ -259,13 +236,37 @@ body.dark-mode .read-more {
     transition: transform 0.3s ease; /* Smooth transition for hover effect */
 }
 
+.project-image:hover img {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+.project-details {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    box-sizing: border-box;
+    transition: left 0.3s ease; /* Smooth transition for the wipe effect */
+}
+
+.project-image:hover .project-details {
+    left: 0; /* Slide the details to the left to reveal them */
+}
+
+.projects h2 {
+    grid-column: span 3; /* Make the title span all columns */
+    color: #fff; /* Title color */
+    text-align: center; /* Center align the title */
+    margin-bottom: 20px; /* Space below the title */
+}
+
 .project-title h3 {
     color: #fff;
     margin-top: 10px; /* Space between the image and title */
-}
-
-.project-image:hover img {
-    transform: scale(1.05); /* Slight zoom effect on hover */
 }
 
 /* Responsiveness: Stack columns on smaller screens */
