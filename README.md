@@ -6,7 +6,7 @@ Welcome to my portfolio website! This repo contains the source code for my perso
 
 ## Live
 
-You can view the live version of the website here: [Link to live website](https://csshreyas28.github.io/)
+You can view the live version of the website here: [Link to live website](https://csshreyas.netlify.app/)
 
 ---
 
@@ -35,4 +35,4 @@ Feel free to reach out to me!
 
 - [[LinkedIn](https://www.linkedin.com/in/csshreyas/)]
 
-- [[website link](https://csshreyas28.github.io/)]
+- [[website link](https://csshreyas.netlify.app/)]
