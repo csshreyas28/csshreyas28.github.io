@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const contactRoutes = require('./routes/contact');
 
 const app = express();
 app.use(express.json());  // To parse JSON data
@@ -16,6 +17,9 @@ mongoose.connect(process.env.MONGO_URI, {
 })
 .then(() => console.log('MongoDB connected'))
 .catch((err) => console.log(err));
+
+// Use the contact routes
+app.use('/api', contactRoutes);
 
 // Basic route to test server
 app.get('/', (req, res) => {
