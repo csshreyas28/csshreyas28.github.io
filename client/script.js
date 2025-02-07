@@ -14,42 +14,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Switch between dark and light mode
     modeToggle.addEventListener("change", () => {
-      if (modeToggle.checked) {
-        document.body.classList.remove("light-mode");
-        document.body.classList.add("dark-mode");
-        moonIcon.style.display = "block";
-        sunIcon.style.display = "none";
-        localStorage.setItem("theme", "dark");
-      } else {
-        document.body.classList.remove("dark-mode");
-        document.body.classList.add("light-mode");
-        moonIcon.style.display = "none";
-        sunIcon.style.display = "block";
-        localStorage.setItem("theme", "light");
-      }
+      document.body.classList.toggle("dark-mode", modeToggle.checked);
+      document.body.classList.toggle("light-mode", !modeToggle.checked);
+      moonIcon.style.display = modeToggle.checked ? "block" : "none";
+      sunIcon.style.display = modeToggle.checked ? "none" : "block";
+      localStorage.setItem("theme", modeToggle.checked ? "dark" : "light");
     });
   }
 
   // Set the year dynamically
   const yearSpan = document.querySelector(".year");
-  if (yearSpan) {
-    yearSpan.textContent = new Date().getFullYear();
-  }
+  if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 
   // Toggle Read More functionality
-  function toggleReadMore() {
-    const aboutText = document.getElementById("aboutText");
-    const readMoreBtn = document.getElementById("readMoreBtn");
-
-    if (aboutText && readMoreBtn) {
-      if (aboutText.style.webkitLineClamp === "7") {
-        aboutText.style.webkitLineClamp = "unset"; // Expand the text
-        readMoreBtn.textContent = "Read Less";
-      } else {
-        aboutText.style.webkitLineClamp = "7"; // Collapse the text
-        readMoreBtn.textContent = "Read More";
+  const readMoreBtn = document.getElementById("readMoreBtn");
+  if (readMoreBtn) {
+    readMoreBtn.addEventListener("click", () => {
+      const aboutText = document.getElementById("aboutText");
+      if (aboutText) {
+        const expanded = aboutText.style.webkitLineClamp !== "7";
+        aboutText.style.webkitLineClamp = expanded ? "7" : "unset";
+        readMoreBtn.textContent = expanded ? "Read More" : "Read Less";
       }
-    }
+    });
   }
 
   // Typewriter effect
@@ -67,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ? currentText.substring(0, charIndex--)
       : currentText.substring(0, charIndex++);
 
-    typewriterElement.innerHTML = displayedText.replace(/\n/g, "<br>"); // Handle new lines
+    typewriterElement.innerHTML = displayedText.replace(/\n/g, "<br>");
 
     if (!isDeleting && charIndex === currentText.length) {
       setTimeout(() => (isDeleting = true), 1000);
@@ -77,8 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const typingSpeed = isDeleting ? 100 : 150;
-    setTimeout(typewriterEffect, typingSpeed);
+    setTimeout(typewriterEffect, isDeleting ? 100 : 150);
   }
 
   typewriterEffect();
@@ -86,15 +72,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize the map
   const mapContainer = document.getElementById("map");
   if (mapContainer) {
-    const map = L.map("map").setView([15.3173, 75.7139], 7); // Centered on Karnataka
+    const map = L.map("map").setView([15.3173, 75.7139], 7);
 
-    // Add OpenStreetMap tiles
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(map);
 
-    // Add a marker to the map
     L.marker([15.3173, 75.7139])
       .addTo(map)
       .bindPopup("Karnataka, India")
@@ -102,61 +86,54 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Contact form submission with reCAPTCHA
-  document.addEventListener("DOMContentLoaded", () => {
-    const contactForm = document.getElementById("contactForm");
-    if (contactForm) {
-      contactForm.addEventListener("submit", async function (e) {
-        e.preventDefault();
-  
-        const name = document.getElementById("name")?.value.trim();
-        const email = document.getElementById("email")?.value.trim();
-        const message = document.getElementById("message")?.value.trim();
-        const responseMessage = document.getElementById("responseMessage");
-        const submitButton = contactForm.querySelector("button[type='submit']");
-  
-        if (!name || !email || !message) {
-          if (responseMessage) responseMessage.innerText = "All fields are required!";
-          return;
-        }
-  
-        // Disable the button to prevent multiple submissions
-        submitButton.disabled = true;
-        submitButton.innerText = "Sending...";
-  
-        try {
-          // Get reCAPTCHA token
-          const recaptchaResponse = await grecaptcha.execute(
-            "6LeajM8qAAAAAGMH3Zvf-voIfoNfUNKJhdKn5RDS",
-            { action: "submit" }
-          );
-  
-          // Send data to backend
-          const response = await fetch(
-            "https://csshreyas-backend.onrender.com/api/contact",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ name, email, message, recaptchaResponse }),
-            }
-          );
-  
-          const result = await response.json();
-          if (responseMessage) responseMessage.innerText = result.message;
-  
-          if (response.ok) {
-            // Clear the form if submission is successful
-            contactForm.reset();
+  const contactForm = document.getElementById("contactForm");
+  if (contactForm) {
+    contactForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name")?.value.trim();
+      const email = document.getElementById("email")?.value.trim();
+      const message = document.getElementById("message")?.value.trim();
+      const responseMessage = document.getElementById("responseMessage");
+      const submitButton = contactForm.querySelector("button[type='submit']");
+
+      if (!name || !email || !message) {
+        if (responseMessage) responseMessage.innerText = "All fields are required!";
+        return;
+      }
+
+      // Disable the button to prevent multiple submissions
+      submitButton.disabled = true;
+      submitButton.innerText = "Sending...";
+
+      try {
+        // Get reCAPTCHA token
+        const recaptchaResponse = await grecaptcha.execute(
+          "6LeajM8qAAAAAGMH3Zvf-voIfoNfUNKJhdKn5RDS",
+          { action: "submit" }
+        );
+
+        // Send data to backend
+        const response = await fetch(
+          "https://csshreyas-backend.onrender.com/api/contact",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, message, recaptchaResponse }),
           }
-        } catch (error) {
-          if (responseMessage) responseMessage.innerText = "Submission failed. Try again!";
-        }
-  
-        // Re-enable the button
-        submitButton.disabled = false;
-        submitButton.innerText = "Send";
-      });
-    }
-  });
+        );
+
+        const result = await response.json();
+        if (responseMessage) responseMessage.innerText = result.message;
+
+        if (response.ok) contactForm.reset(); // Clear the form on success
+      } catch (error) {
+        if (responseMessage) responseMessage.innerText = "Submission failed. Try again!";
+      }
+
+      // Re-enable the button
+      submitButton.disabled = false;
+      submitButton.innerText = "Send";
+    });
+  }
 });
