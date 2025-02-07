@@ -138,7 +138,7 @@ app.post('/api/contact',
         from: process.env.EMAIL_USER,
         to: email,
         subject: 'Thank You for Contacting Shreyas!',
-        text: `Hi ${name},\n\nThank you for reaching out to me. I have received your message and will get back to you soon.\nRegards,\nS\n\nYour Message:\n${message}`,
+        text: `Hi ${name},\n\nThank you for reaching out to me. I have received your message and will get back to you soon.\n\nRegards,\n\nShreyas C.S.\n\nYour Message:\n${message}`,
       };
       await transporter.sendMail(userMailOptions);
 
