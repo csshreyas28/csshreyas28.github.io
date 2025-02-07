@@ -110,7 +110,7 @@ app.post('/api/contact', async (req, res) => {
         from: process.env.EMAIL_USER,
         to: email,  // The email of the user who submitted the form
         subject: 'Thank You for Contacting Shreyas!',
-        text: `Hi ${name},\n\nThank you for reaching out to me. I have received your message and will get back to you soon.\n\nYour Message:\n${message}`,
+        text: `Hi ${name},\n\nThank you for reaching out to me. I have received your message and will get back to you soon.\nRegards,\nS\n\nYour Message:\n${message}`,
       };
   
       await transporter.sendMail(userMailOptions);
