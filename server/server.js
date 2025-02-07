@@ -82,7 +82,7 @@ app.post('/api/contact', async (req, res) => {
     // Send email notification to admin
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: 'your-email@example.com',  // Your email address
+      to: process.env.EMAIL_RECIPIENT,  
       subject: 'New Contact Form Submission',
       text: `New contact message:\nName: ${name}\nEmail: ${email}\nMessage: ${message}`,
     };
