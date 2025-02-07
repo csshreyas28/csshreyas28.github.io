@@ -100,7 +100,7 @@ document.getElementById('contactForm').addEventListener('submit', async function
   const message = document.getElementById('message').value;
 
   // Get reCAPTCHA token
-  const recaptchaResponse = await grecaptcha.execute('your-site-key', { action: 'submit' });
+  const recaptchaResponse = await grecaptcha.execute('6LeajM8qAAAAAGMH3Zvf-voIfoNfUNKJhdKn5RDS', { action: 'submit' });
 
   // Send data to backend
   const response = await fetch('https://name-backend.onrender.com/api/contact', {
