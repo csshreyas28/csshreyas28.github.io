@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());  // Middleware to parse JSON
 app.use(cors());  // Enable CORS
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
@@ -23,7 +23,7 @@ app.use('/api/contact', contactRoutes);
 
 // Test route
 app.get('/', (req, res) => {
-  res.send('Backend is running!');
+  res.send('Hello from Shreyas!');
 });
 
 app.listen(PORT, () => {
