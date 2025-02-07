@@ -86,7 +86,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Contact form submission with reCAPTCHA
-  const contactForm = document.getElementById("contactForm");
+ const contactForm = document.getElementById("contactForm");
+
   if (contactForm) {
     contactForm.addEventListener("submit", async function (e) {
       e.preventDefault();
@@ -98,11 +99,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const submitButton = contactForm.querySelector("button[type='submit']");
 
       if (!name || !email || !message) {
-        if (responseMessage) responseMessage.innerText = "All fields are required!";
+        responseMessage.innerText = "⚠️ All fields are required!";
+        responseMessage.style.color = "red";
         return;
       }
 
-      // Disable the button to prevent multiple submissions
+      // Disable button to prevent multiple submissions
       submitButton.disabled = true;
       submitButton.innerText = "Sending...";
 
@@ -124,14 +126,24 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
         const result = await response.json();
-        if (responseMessage) responseMessage.innerText = result.message;
 
-        if (response.ok) contactForm.reset(); // Clear the form on success
+        if (!response.ok) {
+          throw new Error(result.message || "Something went wrong! Please try again.");
+        }
+
+        // Success message
+        responseMessage.innerText = "✅ Message sent successfully!";
+        responseMessage.style.color = "green";
+
+        // Clear form on success
+        contactForm.reset();
       } catch (error) {
-        if (responseMessage) responseMessage.innerText = "Submission failed. Try again!";
+        // Show proper error message
+        responseMessage.innerText = `❌ ${error.message}`;
+        responseMessage.style.color = "red";
       }
 
-      // Re-enable the button
+      // Re-enable button
       submitButton.disabled = false;
       submitButton.innerText = "Send";
     });
