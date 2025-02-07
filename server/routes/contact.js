@@ -1,19 +1,37 @@
 const express = require('express');
 const Contact = require('../models/Contact');
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
+const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key';
 
 // 🔹 Configure Nodemailer Transporter
 const transporter = nodemailer.createTransport({
-  service: 'gmail', // Use your email provider
+  service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER, // Your Gmail or SMTP email
-    pass: process.env.EMAIL_PASS, // Your App Password (not actual email password)
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
-// 📩 Contact Form Route
+// 🛑 Middleware to Protect Routes
+function authenticateToken(req, res, next) {
+  const token = req.headers.authorization?.split(' ')[1]; // Extract token from "Bearer <token>"
+  if (!token) {
+    return res.status(401).json({ success: false, message: 'Access denied' });
+  }
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ success: false, message: 'Invalid token' });
+    }
+    req.user = user;
+    next();
+  });
+}
+
+// 📩 Contact Form Route (Public)
 router.post('/', async (req, res) => {
   try {
     const { name, email, message } = req.body;
@@ -43,14 +61,14 @@ router.post('/', async (req, res) => {
   }
 });
 
-// 🟢 Fetch All Contact Submissions (Admin Dashboard)
-router.get('/', async (req, res) => {
-    try {
-      const contacts = await Contact.find().sort({ createdAt: -1 }); // Newest first
-      res.status(200).json({ success: true, contacts });
-    } catch (error) {
-      res.status(500).json({ success: false, message: error.message });
-    }
-  }); 
+// 🟢 Fetch All Contact Submissions (Protected)
+router.get('/', authenticateToken, async (req, res) => {
+  try {
+    const contacts = await Contact.find().sort({ createdAt: -1 }); // Newest first
+    res.status(200).json({ success: true, contacts });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
 
 module.exports = router;

@@ -3,20 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Submissions</title>
+    <title>Admin Dashboard</title>
     <script defer src="dashboard.js"></script>
 </head>
 <body>
-    <h1>Contact Form Submissions</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Message</th>
-            </tr>
-        </thead>
-        <tbody id="contactTable"></tbody>
-    </table>
+    <h1>Admin Login</h1>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+
+    <div id="dashboard" style="display: none;">
+        <h1>Contact Form Submissions</h1>
+        <button onclick="logout()">Logout</button>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody id="contactTable"></tbody>
+        </table>
+    </div>
 </body>
 </html>
