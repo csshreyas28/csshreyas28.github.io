@@ -92,9 +92,6 @@ const transporter = nodemailer.createTransport({
 const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY;
 
 // Contact Form Route with reCAPTCHA Verification
-const { body, validationResult } = require('express-validator');
-const sanitizeHtml = require('sanitize-html');
-
 app.post('/api/contact',
   [
     // Validate Inputs
