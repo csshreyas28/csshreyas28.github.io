@@ -102,45 +102,61 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Contact form submission with reCAPTCHA
-  const contactForm = document.getElementById("contactForm");
-  if (contactForm) {
-    contactForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
-
-      const name = document.getElementById("name")?.value;
-      const email = document.getElementById("email")?.value;
-      const message = document.getElementById("message")?.value;
-      const responseMessage = document.getElementById("responseMessage");
-
-      if (!name || !email || !message) {
-        if (responseMessage) responseMessage.innerText = "All fields are required!";
-        return;
-      }
-
-      try {
-        // Get reCAPTCHA token
-        const recaptchaResponse = await grecaptcha.execute(
-          "6LeajM8qAAAAAGMH3Zvf-voIfoNfUNKJhdKn5RDS",
-          { action: "submit" }
-        );
-
-        // Send data to backend
-        const response = await fetch(
-          "https://csshreyas-backend.onrender.com/api/contact",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ name, email, message, recaptchaResponse }),
+  document.addEventListener("DOMContentLoaded", () => {
+    const contactForm = document.getElementById("contactForm");
+    if (contactForm) {
+      contactForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+  
+        const name = document.getElementById("name")?.value.trim();
+        const email = document.getElementById("email")?.value.trim();
+        const message = document.getElementById("message")?.value.trim();
+        const responseMessage = document.getElementById("responseMessage");
+        const submitButton = contactForm.querySelector("button[type='submit']");
+  
+        if (!name || !email || !message) {
+          if (responseMessage) responseMessage.innerText = "All fields are required!";
+          return;
+        }
+  
+        // Disable the button to prevent multiple submissions
+        submitButton.disabled = true;
+        submitButton.innerText = "Sending...";
+  
+        try {
+          // Get reCAPTCHA token
+          const recaptchaResponse = await grecaptcha.execute(
+            "6LeajM8qAAAAAGMH3Zvf-voIfoNfUNKJhdKn5RDS",
+            { action: "submit" }
+          );
+  
+          // Send data to backend
+          const response = await fetch(
+            "https://csshreyas-backend.onrender.com/api/contact",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ name, email, message, recaptchaResponse }),
+            }
+          );
+  
+          const result = await response.json();
+          if (responseMessage) responseMessage.innerText = result.message;
+  
+          if (response.ok) {
+            // Clear the form if submission is successful
+            contactForm.reset();
           }
-        );
-
-        const result = await response.json();
-        if (responseMessage) responseMessage.innerText = result.message;
-      } catch (error) {
-        if (responseMessage) responseMessage.innerText = "Submission failed. Try again!";
-      }
-    });
-  }
+        } catch (error) {
+          if (responseMessage) responseMessage.innerText = "Submission failed. Try again!";
+        }
+  
+        // Re-enable the button
+        submitButton.disabled = false;
+        submitButton.innerText = "Send";
+      });
+    }
+  });
 });
