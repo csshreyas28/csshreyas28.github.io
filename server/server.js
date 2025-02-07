@@ -80,41 +80,51 @@ const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY;
 
 // Contact Form Route with reCAPTCHA Verification
 app.post('/api/contact', async (req, res) => {
-  try {
-    const { name, email, message, recaptchaResponse } = req.body;
-
-    if (!name || !email || !message || !recaptchaResponse) {
-      return res.status(400).json({ success: false, message: 'All fields and CAPTCHA are required' });
+    try {
+      const { name, email, message, recaptchaResponse } = req.body;
+  
+      if (!name || !email || !message || !recaptchaResponse) {
+        return res.status(400).json({ success: false, message: 'All fields and CAPTCHA are required' });
+      }
+  
+      // Verify reCAPTCHA with Google API
+      const recaptchaVerificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecret}&response=${recaptchaResponse}`;
+  
+      const recaptchaResult = await axios.post(recaptchaVerificationUrl);
+      if (!recaptchaResult.data.success) {
+        return res.status(400).json({ success: false, message: 'Invalid CAPTCHA' });
+      }
+  
+      // Send email notification to admin (your email)
+      const adminMailOptions = {
+        from: process.env.EMAIL_USER,
+        to: process.env.EMAIL_RECIPIENT,  // The email of the admin
+        subject: 'New Contact Form Submission',
+        text: `New contact message:\nName: ${name}\nEmail: ${email}\nMessage: ${message}`,
+      };
+  
+      await transporter.sendMail(adminMailOptions);
+  
+      // Send confirmation email to the user (email from the form)
+      const userMailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,  // The email of the user who submitted the form
+        subject: 'Thank You for Contacting Shreyas!',
+        text: `Hi ${name},\n\nThank you for reaching out to me. I have received your message and will get back to you soon.\n\nYour Message:\n${message}`,
+      };
+  
+      await transporter.sendMail(userMailOptions);
+  
+      // Save contact info to MongoDB
+      const newContact = new Contact({ name, email, message });
+      await newContact.save();
+  
+      res.status(201).json({ success: true, message: 'Message sent successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: error.message });
     }
-
-    // Verify reCAPTCHA with Google API
-    const recaptchaVerificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecret}&response=${recaptchaResponse}`;
-
-    const recaptchaResult = await axios.post(recaptchaVerificationUrl);
-    if (!recaptchaResult.data.success) {
-      return res.status(400).json({ success: false, message: 'Invalid CAPTCHA' });
-    }
-
-    // Send email notification to admin
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_RECIPIENT,  
-      subject: 'New Contact Form Submission',
-      text: `New contact message:\nName: ${name}\nEmail: ${email}\nMessage: ${message}`,
-    };
-
-    await transporter.sendMail(mailOptions);
-
-    // Save contact info to MongoDB
-    const newContact = new Contact({ name, email, message });
-    await newContact.save();
-
-    res.status(201).json({ success: true, message: 'Message sent successfully' });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
+  });
 
 // Fetch all contacts (Admin Dashboard - GET Request)
 app.get('/api/contact', authenticateJWT, async (req, res) => {
