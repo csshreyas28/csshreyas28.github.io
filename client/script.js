@@ -99,7 +99,7 @@ document.getElementById('contactForm').addEventListener('submit', async function
   const message = document.getElementById('message').value;
 
   // Send data to backend
-  const response = await fetch('https://csshreyas-backend.netlify.app/.netlify/functions/contact', {
+  const response = await fetch('https://csshreyas-backend.onrender.com/api/contact', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
