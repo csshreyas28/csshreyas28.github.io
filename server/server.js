@@ -5,12 +5,12 @@ const cors = require('cors');
 const contactRoutes = require('./routes/contact');
 
 const app = express();
-app.use(express.json());  // To parse JSON data
-app.use(cors());  // To enable CORS (Cross-Origin Resource Sharing)
+app.use(express.json());  // Middleware to parse JSON
+app.use(cors());  // Enable CORS
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
-// MongoDB connection
+// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -18,15 +18,14 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('MongoDB connected'))
 .catch((err) => console.log(err));
 
-// Use the contact routes
-app.use('/api', contactRoutes);
+// Use routes
+app.use('/api/contact', contactRoutes);
 
-// Basic route to test server
+// Test route
 app.get('/', (req, res) => {
-  res.send('Backend is running');
+  res.send('Backend is running!');
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
