@@ -6,11 +6,14 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const axios = require('axios');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const Contact = require('./models/Contact'); // Make sure your Contact model is imported
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(helmet()); // Secure HTTP headers
 
 const PORT = process.env.PORT || 3000;
 
@@ -30,19 +33,29 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
+// 🚀 Rate Limiting
+const apiLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 });
+app.use('/api', apiLimiter);
+
+const contactLimiter = rateLimit({ windowMs: 60 * 1000, max: 5 });
+app.use('/api/contact', contactLimiter);
+
+const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 5 });
+app.use('/api/admin/login', loginLimiter);
+
 // JWT Authentication Middleware
 const authenticateJWT = (req, res, next) => {
-  const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1]; // Get token from the header
+  const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1];
   if (!token) {
-    return res.sendStatus(403); // Forbidden if no token
+    return res.sendStatus(403);
   }
 
   jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) {
-      return res.sendStatus(403); // Forbidden if token is invalid
+      return res.sendStatus(403);
     }
     req.user = user;
-    next(); // Continue to the next middleware or route handler
+    next();
   });
 };
 
@@ -54,24 +67,22 @@ app.post('/api/admin/login', async (req, res) => {
     return res.status(401).json({ success: false, message: 'Invalid username' });
   }
 
-  // Compare passwords
   const isMatch = await bcrypt.compare(password, await bcrypt.hash(ADMIN_PASSWORD, 10));
   if (!isMatch) {
     return res.status(401).json({ success: false, message: 'Invalid password' });
   }
 
-  // Generate JWT Token
   const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
 
   res.json({ success: true, token });
 });
 
-// Set up the transporter using Gmail (or another service)
+// Email Transporter
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER,  // Your email address
-    pass: process.env.EMAIL_PASS,  // Your email password or app password
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   }
 });
 
@@ -82,43 +93,36 @@ const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY;
 app.post('/api/contact', async (req, res) => {
     try {
       const { name, email, message, recaptchaResponse } = req.body;
-  
+
       if (!name || !email || !message || !recaptchaResponse) {
         return res.status(400).json({ success: false, message: 'All fields and CAPTCHA are required' });
       }
-  
-      // Verify reCAPTCHA with Google API
+
       const recaptchaVerificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecret}&response=${recaptchaResponse}`;
-  
       const recaptchaResult = await axios.post(recaptchaVerificationUrl);
       if (!recaptchaResult.data.success) {
         return res.status(400).json({ success: false, message: 'Invalid CAPTCHA' });
       }
-  
-      // Send email notification to admin (your email)
+
       const adminMailOptions = {
         from: process.env.EMAIL_USER,
-        to: process.env.EMAIL_RECIPIENT,  // The email of the admin
+        to: process.env.EMAIL_RECIPIENT,
         subject: 'New Contact Form Submission',
         text: `New contact message:\nName: ${name}\nEmail: ${email}\nMessage: ${message}`,
       };
-  
       await transporter.sendMail(adminMailOptions);
-  
-      // Send confirmation email to the user (email from the form)
+
       const userMailOptions = {
         from: process.env.EMAIL_USER,
-        to: email,  // The email of the user who submitted the form
+        to: email,
         subject: 'Thank You for Contacting Shreyas!',
         text: `Hi ${name},\n\nThank you for reaching out to me. I have received your message and will get back to you soon.\nRegards,\nS\n\nYour Message:\n${message}`,
       };
-  
       await transporter.sendMail(userMailOptions);
-  
-      // Save contact info to MongoDB
+
       const newContact = new Contact({ name, email, message });
       await newContact.save();
-  
+
       res.status(201).json({ success: true, message: 'Message sent successfully' });
     } catch (error) {
       console.error(error);
@@ -129,7 +133,7 @@ app.post('/api/contact', async (req, res) => {
 // Fetch all contacts (Admin Dashboard - GET Request)
 app.get('/api/contact', authenticateJWT, async (req, res) => {
     try {
-      const contacts = await Contact.find();  // Fetch all contacts from MongoDB
+      const contacts = await Contact.find();
       res.json({ success: true, contacts });
     } catch (error) {
       console.error(error);
