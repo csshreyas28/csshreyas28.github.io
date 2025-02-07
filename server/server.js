@@ -47,20 +47,22 @@ app.use('/api/admin/login', loginLimiter);
 
 // JWT Authentication Middleware
 const authenticateJWT = (req, res, next) => {
-  const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1];
-  if (!token) {
-    return res.sendStatus(403);
-  }
-
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) {
-      return res.sendStatus(403);
+    const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1];
+  
+    if (!token) {
+      return res.status(403).send("🚫 Access Denied! This area is for admin only. Nice try though! 😜");
     }
-    req.user = user;
-    next();
-  });
-};
+  
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+      if (err) {
+        return res.status(403).send("🔒 Oops! You don't have the magic key to enter here! 🚷");
+      }
+      req.user = user;
+      next();
+    });
+  };
 
+// Default Route
 app.get('/', (_req, res) => {
     res.send('Hello from Shreyas! 🚀');
   });
