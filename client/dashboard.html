@@ -6,26 +6,49 @@
     <title>Admin Dashboard</title>
     <script defer src="dashboard.js"></script>
 </head>
-<body>
-    <h1>Admin Login</h1>
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="login()">Login</button>
-    <a href="https://csshreyas.netlify.app" target="_blank">Go to Portfolio!</a>
+<body style="font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4; margin: 0; padding: 20px;">
 
-    <div id="dashboard" style="display: none;">
-        <h1>Contact Form Submissions</h1>
-        <button onclick="logout()">Logout</button>
-        <table border="1">
+    <h1 style="color: #333;">Admin Login</h1>
+
+    <div style="background: white; padding: 20px; width: 300px; margin: auto; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0,0,0,0.2);">
+        <input type="text" id="username" placeholder="Username" 
+            style="width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px;">
+
+        <input type="password" id="password" placeholder="Password" 
+            style="width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px;">
+
+        <button onclick="login()" 
+            style="width: 100%; padding: 10px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            Login
+        </button>
+    </div>
+
+    <p>
+        <a href="https://csshreyas.netlify.app" target="_blank" 
+            style="color: #007BFF; text-decoration: none; font-size: 16px;">
+            Go to Portfolio!
+        </a>
+    </p>
+
+    <div id="dashboard" style="display: none; background: white; padding: 20px; margin-top: 20px; width: 80%; margin: auto; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0,0,0,0.2);">
+        <h1 style="color: #333;">Contact Form Submissions</h1>
+
+        <button onclick="logout()" 
+            style="padding: 10px 15px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            Logout
+        </button>
+
+        <table border="1" style="width: 100%; margin-top: 20px; border-collapse: collapse;">
             <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Message</th>
+                <tr style="background-color: #007BFF; color: white;">
+                    <th style="padding: 10px; width: 20%;">Name</th>
+                    <th style="padding: 10px; width: 25%;">Email</th>
+                    <th style="padding: 10px; width: 55%;">Message</th>
                 </tr>
             </thead>
             <tbody id="contactTable"></tbody>
         </table>
     </div>
+
 </body>
 </html>
