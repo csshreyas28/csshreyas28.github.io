@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const axios = require('axios');
-const Contact = require('./models/Contact'); 
+const Contact = require('./models/Contact'); // Make sure your Contact model is imported
 
 const app = express();
 app.use(express.json());
@@ -29,6 +29,22 @@ mongoose.connect(process.env.MONGO_URI, {
 const JWT_SECRET = process.env.JWT_SECRET;
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+
+// JWT Authentication Middleware
+const authenticateJWT = (req, res, next) => {
+  const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1]; // Get token from the header
+  if (!token) {
+    return res.sendStatus(403); // Forbidden if no token
+  }
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.sendStatus(403); // Forbidden if token is invalid
+    }
+    req.user = user;
+    next(); // Continue to the next middleware or route handler
+  });
+};
 
 // 🔹 Admin Login Route
 app.post('/api/admin/login', async (req, res) => {
