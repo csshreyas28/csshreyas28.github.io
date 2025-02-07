@@ -103,7 +103,7 @@ document.getElementById('contactForm').addEventListener('submit', async function
   const recaptchaResponse = await grecaptcha.execute('6LeajM8qAAAAAGMH3Zvf-voIfoNfUNKJhdKn5RDS', { action: 'submit' });
 
   // Send data to backend
-  const response = await fetch('https://name-backend.onrender.com/api/contact', {
+  const response = await fetch('https://csshreyas-backend.onrender.com/api/contact', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
