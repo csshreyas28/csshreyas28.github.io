@@ -100,6 +100,17 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
+// Fetch all contacts (Admin Dashboard - GET Request)
+app.get('/api/contact', authenticateJWT, async (req, res) => {
+    try {
+      const contacts = await Contact.find();  // Fetch all contacts from MongoDB
+      res.json({ success: true, contacts });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Error fetching contacts' });
+    }
+  });
+  
 // Start the server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);

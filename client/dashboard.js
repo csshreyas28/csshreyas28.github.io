@@ -32,11 +32,12 @@ async function fetchContacts() {
 
     try {
         const response = await fetch(`${API_URL}/api/contact`, {
+            method: 'GET',  // Change to 'GET' method to fetch contacts
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
         // Log the response status and body for debugging
-        const text = await response.text(); // Read the response as text first
+        const text = await response.text();  // Read the response as text first
         console.log('Response:', text);
 
         // Check if the response is okay (status 200)
@@ -67,6 +68,7 @@ async function fetchContacts() {
         alert('There was an error with the request');
     }
 }
+
 
 function logout() {
     localStorage.removeItem('token');
