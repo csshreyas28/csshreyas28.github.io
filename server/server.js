@@ -61,6 +61,10 @@ const authenticateJWT = (req, res, next) => {
   });
 };
 
+app.get('/', (_req, res) => {
+    res.send('Hello from Shreyas! 🚀');
+  });
+  
 // 🔹 Admin Login Route
 app.post('/api/admin/login', async (req, res) => {
   const { username, password } = req.body;
