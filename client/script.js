@@ -110,3 +110,12 @@ document.getElementById('contactForm').addEventListener('submit', async function
   const result = await response.json();
   document.getElementById('responseMessage').innerText = result.message;
 });
+
+// Recaptcha
+const recaptchaResponse = grecaptcha.getResponse();  // Gets the CAPTCHA response
+
+const response = await fetch('https://csshreyas-backend.onrender.com/api/contact', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ name, email, message, recaptchaResponse })
+});

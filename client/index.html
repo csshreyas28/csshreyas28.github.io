@@ -17,6 +17,10 @@
     gtag('config', 'G-R46004V2RZ');
     </script>
 
+<!-- Google Recaptcha -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   </head>
@@ -140,13 +144,18 @@
   </div>
 </div>    
 
-<!-- test form -->
+<!--form -->
 <form id="contactForm">
   <input type="text" id="name" placeholder="Your Name" required>
   <input type="email" id="email" placeholder="Your Email" required>
   <textarea id="message" placeholder="Your Message" required></textarea>
+
+  <!-- Add Google reCAPTCHA -->
+  <div class="g-recaptcha" data-sitekey="6LebjM8qAAAAAP2biMrF_eLH6eWooJ9GEaIO6VR_"></div>
+
   <button type="submit">Send</button>
 </form>
+
 <p id="responseMessage"></p>
 <!-- form end -->
 

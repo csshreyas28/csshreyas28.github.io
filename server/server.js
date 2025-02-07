@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
+const axios = require('axios');
 
 const contactRoutes = require('./routes/contact');
 
@@ -25,9 +27,9 @@ mongoose.connect(process.env.MONGO_URI, {
 });
 
 // 🔐 Secret key for JWT
-const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key';
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
+const JWT_SECRET = process.env.JWT_SECRET; //  set in .env
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME; //  set in .env
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD; //  set in .env
 
 // 🔹 Admin Login Route
 app.post('/api/admin/login', async (req, res) => {
@@ -47,6 +49,53 @@ app.post('/api/admin/login', async (req, res) => {
   const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
 
   res.json({ success: true, token });
+});
+
+// Set up the transporter using Gmail (or another service)
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,  // Your email address
+        pass: process.env.EMAIL_PASS,  // Your email password or app password
+    }
+});
+
+// Contact form route with reCAPTCHA verification
+app.post('/api/contact', async (req, res) => {
+  try {
+    const { name, email, message, recaptchaResponse } = req.body;
+
+    if (!name || !email || !message || !recaptchaResponse) {
+      return res.status(400).json({ success: false, message: 'All fields and CAPTCHA are required' });
+    }
+
+    // Verify reCAPTCHA with Google API
+    const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY;
+    const recaptchaVerificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecret}&response=${recaptchaResponse}`;
+
+    const recaptchaResult = await axios.post(recaptchaVerificationUrl);
+    if (!recaptchaResult.data.success) {
+      return res.status(400).json({ success: false, message: 'Invalid CAPTCHA' });
+    }
+
+    // Send email notification to admin (you can change the recipient to your email)
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: 'your-email@example.com',  // Your email address
+      subject: 'New Contact Form Submission',
+      text: `New contact message:\nName: ${name}\nEmail: ${email}\nMessage: ${message}`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    // Save contact info to MongoDB
+    const newContact = new Contact({ name, email, message });
+    await newContact.save();
+
+    res.status(201).json({ success: true, message: 'Message sent successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
 });
 
 // Use Routes
