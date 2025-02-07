@@ -43,8 +43,9 @@ function toggleReadMore() {
       aboutText.style.webkitLineClamp = '7'; // Collapse the text
       readMoreBtn.textContent = 'Read More';
     }
-  }
-  // Typewriter effect
+}
+
+// Typewriter effect
 const typewriterText = ["Hey.\nI'm Shreyas!"]; // Include both lines as one entry
 const typewriterElement = document.getElementById("typewriter");
 
@@ -90,7 +91,7 @@ L.marker([15.3173, 75.7139])
   .bindPopup('Karnataka, India') 
   .openPopup();
 
-// Contact form submission
+// Contact form submission with reCAPTCHA
 document.getElementById('contactForm').addEventListener('submit', async function (e) {
   e.preventDefault();
   
@@ -98,24 +99,18 @@ document.getElementById('contactForm').addEventListener('submit', async function
   const email = document.getElementById('email').value;
   const message = document.getElementById('message').value;
 
+  // Get reCAPTCHA token
+  const recaptchaResponse = await grecaptcha.execute('your-site-key', { action: 'submit' });
+
   // Send data to backend
-  const response = await fetch('https://csshreyas-backend.onrender.com/api/contact', {
+  const response = await fetch('https://name-backend.onrender.com/api/contact', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ name, email, message })
+      body: JSON.stringify({ name, email, message, recaptchaResponse })
   });
 
   const result = await response.json();
   document.getElementById('responseMessage').innerText = result.message;
-});
-
-// Recaptcha
-const recaptchaResponse = grecaptcha.getResponse();  // Gets the CAPTCHA response
-
-const response = await fetch('https://csshreyas-backend.onrender.com/api/contact', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ name, email, message, recaptchaResponse })
 });

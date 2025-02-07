@@ -6,8 +6,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const axios = require('axios');
-
-const contactRoutes = require('./routes/contact');
+const Contact = require('./models/Contact');  // Ensure you have a Contact model in the './models' directory
 
 const app = express();
 app.use(express.json());
@@ -20,16 +19,16 @@ mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log('✅ MongoDB Connected'))
-.catch((err) => {
-  console.error('❌ MongoDB Connection Error:', err);
-  process.exit(1);
-});
+  .then(() => console.log('✅ MongoDB Connected'))
+  .catch((err) => {
+    console.error('❌ MongoDB Connection Error:', err);
+    process.exit(1);
+  });
 
 // 🔐 Secret key for JWT
-const JWT_SECRET = process.env.JWT_SECRET; //  set in .env
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME; //  set in .env
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD; //  set in .env
+const JWT_SECRET = process.env.JWT_SECRET;
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 // 🔹 Admin Login Route
 app.post('/api/admin/login', async (req, res) => {
@@ -53,14 +52,17 @@ app.post('/api/admin/login', async (req, res) => {
 
 // Set up the transporter using Gmail (or another service)
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,  // Your email address
-        pass: process.env.EMAIL_PASS,  // Your email password or app password
-    }
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,  // Your email address
+    pass: process.env.EMAIL_PASS,  // Your email password or app password
+  }
 });
 
-// Contact form route with reCAPTCHA verification
+// reCAPTCHA Secret Key
+const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY;
+
+// Contact Form Route with reCAPTCHA Verification
 app.post('/api/contact', async (req, res) => {
   try {
     const { name, email, message, recaptchaResponse } = req.body;
@@ -70,7 +72,6 @@ app.post('/api/contact', async (req, res) => {
     }
 
     // Verify reCAPTCHA with Google API
-    const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY;
     const recaptchaVerificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecret}&response=${recaptchaResponse}`;
 
     const recaptchaResult = await axios.post(recaptchaVerificationUrl);
@@ -78,7 +79,7 @@ app.post('/api/contact', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Invalid CAPTCHA' });
     }
 
-    // Send email notification to admin (you can change the recipient to your email)
+    // Send email notification to admin
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: 'your-email@example.com',  // Your email address
@@ -94,13 +95,12 @@ app.post('/api/contact', async (req, res) => {
 
     res.status(201).json({ success: true, message: 'Message sent successfully' });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
 
-// Use Routes
-app.use('/api/contact', contactRoutes);
-
+// Start the server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
