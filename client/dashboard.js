@@ -35,7 +35,18 @@ async function fetchContacts() {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
-        const data = await response.json();
+        // Log the response status and body for debugging
+        const text = await response.text(); // Read the response as text first
+        console.log('Response:', text);
+
+        // Check if the response is okay (status 200)
+        if (!response.ok) {
+            alert('Error fetching contacts: ' + response.statusText);
+            return;
+        }
+
+        // Try to parse the response as JSON
+        const data = JSON.parse(text);  // Attempt to parse the response as JSON
         if (data.success) {
             const table = document.getElementById('contactTable');
             table.innerHTML = "";
@@ -53,6 +64,7 @@ async function fetchContacts() {
         }
     } catch (error) {
         console.error('Error:', error);
+        alert('There was an error with the request');
     }
 }
 

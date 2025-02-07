@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const axios = require('axios');
-const Contact = require('./models/Contact');  // Ensure you have a Contact model in the './models' directory
+const Contact = require('./models/Contact'); 
 
 const app = express();
 app.use(express.json());
