@@ -38,7 +38,7 @@ async function fetchContacts() {
 
         // Log the response status and body for debugging
         const text = await response.text();  // Read the response as text first
-        console.log('Response:', text);
+        // console.log('Response:', text);
 
         // Check if the response is okay (status 200)
         if (!response.ok) {
