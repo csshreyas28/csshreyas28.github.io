@@ -8,10 +8,12 @@ const nodemailer = require('nodemailer');
 const axios = require('axios');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const Contact = require('./models/Contact'); // Make sure your Contact model is imported
+const Contact = require('./models/Contact');
+const { body, validationResult } = require('express-validator');
+const sanitizeHtml = require('sanitize-html');
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: '10kb' }));
 app.use(cors());
 app.use(helmet()); // Secure HTTP headers
 
@@ -90,20 +92,39 @@ const transporter = nodemailer.createTransport({
 const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY;
 
 // Contact Form Route with reCAPTCHA Verification
-app.post('/api/contact', async (req, res) => {
+const { body, validationResult } = require('express-validator');
+const sanitizeHtml = require('sanitize-html');
+
+app.post('/api/contact',
+  [
+    // Validate Inputs
+    body('name').trim().escape().isLength({ min: 3 }).withMessage('Name must be at least 3 characters'),
+    body('email').isEmail().withMessage('Invalid email format').normalizeEmail(),
+    body('message').trim().escape().isLength({ min: 10 }).withMessage('Message must be at least 10 characters'),
+    body('recaptchaResponse').notEmpty().withMessage('reCAPTCHA is required')
+  ],
+  async (req, res) => {
+    // Handle Validation Errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, errors: errors.array() });
+    }
+
     try {
-      const { name, email, message, recaptchaResponse } = req.body;
+      let { name, email, message, recaptchaResponse } = req.body;
 
-      if (!name || !email || !message || !recaptchaResponse) {
-        return res.status(400).json({ success: false, message: 'All fields and CAPTCHA are required' });
-      }
+      // Sanitize User Input
+      name = sanitizeHtml(name, { allowedTags: [], allowedAttributes: {} });
+      message = sanitizeHtml(message, { allowedTags: [], allowedAttributes: {} });
 
+      // Verify reCAPTCHA
       const recaptchaVerificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecret}&response=${recaptchaResponse}`;
       const recaptchaResult = await axios.post(recaptchaVerificationUrl);
       if (!recaptchaResult.data.success) {
         return res.status(400).json({ success: false, message: 'Invalid CAPTCHA' });
       }
 
+      // Send Email to Admin
       const adminMailOptions = {
         from: process.env.EMAIL_USER,
         to: process.env.EMAIL_RECIPIENT,
@@ -112,6 +133,7 @@ app.post('/api/contact', async (req, res) => {
       };
       await transporter.sendMail(adminMailOptions);
 
+      // Send Confirmation Email to User
       const userMailOptions = {
         from: process.env.EMAIL_USER,
         to: email,
@@ -120,6 +142,7 @@ app.post('/api/contact', async (req, res) => {
       };
       await transporter.sendMail(userMailOptions);
 
+      // Save to Database
       const newContact = new Contact({ name, email, message });
       await newContact.save();
 
@@ -128,7 +151,8 @@ app.post('/api/contact', async (req, res) => {
       console.error(error);
       res.status(500).json({ success: false, message: error.message });
     }
-  });
+  }
+);
 
 // Fetch all contacts (Admin Dashboard - GET Request)
 app.get('/api/contact', authenticateJWT, async (req, res) => {
