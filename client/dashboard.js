@@ -1,4 +1,4 @@
-const API_URL = 'https://name-backend.onrender.com';
+const API_URL = 'https://csshreyas-backend.onrender.com';
 
 async function login() {
     const username = document.getElementById('username').value;
