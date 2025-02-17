@@ -128,8 +128,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const result = await response.json();
 
         if (!response.ok) {
+          if (result.errors && Array.isArray(result.errors)) {
+              // Extract validation messages and display them
+              const errorMessages = result.errors.map(err => `⚠️ ${err.msg}`).join("\n");
+              throw new Error(errorMessages);
+          }
           throw new Error(result.message || "Something went wrong! Please try again.");
-        }
+      }
 
         // Success message
         responseMessage.innerText = "✅ Message sent successfully!";
