@@ -31,35 +31,37 @@ function authenticateToken(req, res, next) {
   });
 }
 
-// 📩 Contact Form Route (Public)
-router.post('/', async (req, res) => {
-  try {
-    const { name, email, message } = req.body;
+// COMMENTING THE BELOW duplicate contact route in routes/contact.js. Since server.js already handles /api/contact
 
-    if (!name || !email || !message) {
-      return res.status(400).json({ success: false, message: 'All fields are required' });
-    }
+// // 📩 Contact Form Route (Public)
+// router.post('/', async (req, res) => {
+//   try {
+//     const { name, email, message } = req.body;
 
-    const newContact = new Contact({ name, email, message });
-    await newContact.save();
+//     if (!name || !email || !message) {
+//       return res.status(400).json({ success: false, message: 'All fields are required' });
+//     }
 
-    // 📩 Send Confirmation Email
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: 'Thank you for contacting me!',
-      text: `Hi ${name},\n\nThank you for reaching out! I will get back to you soon.\n\nMessage: ${message}\n\nBest Regards,\nS`,
-    };
+//     const newContact = new Contact({ name, email, message });
+//     await newContact.save();
 
-    await transporter.sendMail(mailOptions);
+//     // 📩 Send Confirmation Email
+//     const mailOptions = {
+//       from: process.env.EMAIL_USER,
+//       to: email,
+//       subject: 'Thank you for contacting me!',
+//       text: `Hi ${name},\n\nThank you for reaching out! I will get back to you soon.\n\nMessage: ${message}\n\nBest Regards,\nS`,
+//     };
 
-    res.status(201).json({ success: true, message: 'Message sent successfully and confirmation email sent!' });
+//     await transporter.sendMail(mailOptions);
 
-  } catch (error) {
-    console.error('❌ Error:', error);
-    res.status(500).json({ success: false, message: 'Internal Server Error' });
-  }
-});
+//     res.status(201).json({ success: true, message: 'Message sent successfully and confirmation email sent!' });
+
+//   } catch (error) {
+//     console.error('❌ Error:', error);
+//     res.status(500).json({ success: false, message: 'Internal Server Error' });
+//   }
+// });
 
 // 🟢 Fetch All Contact Submissions (Protected)
 router.get('/', authenticateToken, async (req, res) => {

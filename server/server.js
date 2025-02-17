@@ -46,21 +46,20 @@ const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 5 });
 app.use('/api/admin/login', loginLimiter);
 
 // JWT Authentication Middleware
-const authenticateJWT = (req, res, next) => {
-    const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1];
-  
-    if (!token) {
-      return res.status(403).send("🚫 Access Denied! This area is for admin only. Nice try though! 😜");
-    }
-  
-    jwt.verify(token, JWT_SECRET, (err, user) => {
-      if (err) {
-        return res.status(403).send("🔒 Oops! You don't have the magic key to enter here! 🚷");
+const authenticateJWT = async (req, res, next) => {
+  try {
+      const token = req.headers['authorization']?.split(' ')[1];
+      if (!token) {
+          return res.status(403).json({ message: "🚫 Access Denied! Nice try though! 😜" });
       }
+
+      const user = await jwt.verify(token, JWT_SECRET);
       req.user = user;
       next();
-    });
-  };
+  } catch (err) {
+      res.status(403).json({ message: "🔒 Oops! You don't have the magic key to enter here! 🚷" });
+  }
+};
 
 // Default Route
 app.get('/', (_req, res) => {
@@ -72,16 +71,15 @@ app.post('/api/admin/login', async (req, res) => {
   const { username, password } = req.body;
 
   if (username !== ADMIN_USERNAME) {
-    return res.status(401).json({ success: false, message: 'Invalid username' });
+      return res.status(401).json({ success: false, message: 'Invalid username' });
   }
 
-  const isMatch = await bcrypt.compare(password, await bcrypt.hash(ADMIN_PASSWORD, 10));
+  const isMatch = bcrypt.compareSync(password, ADMIN_PASSWORD);
   if (!isMatch) {
-    return res.status(401).json({ success: false, message: 'Invalid password' });
+      return res.status(401).json({ success: false, message: 'Invalid password' });
   }
 
   const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
-
   res.json({ success: true, token });
 });
 
