@@ -153,4 +153,36 @@ document.addEventListener("DOMContentLoaded", () => {
       submitButton.innerText = "Send";
     });
   }
+
+   // GitHub commit stats
+   const githubUsername = 'csshreyas28';  // Replace with your GitHub username
+   const githubRepo = 'csshreyas28.github.io';      // Replace with your repository name
+   
+// Fetch public events from GitHub API
+fetch(`https://api.github.com/users/${githubUsername}/events/public`)
+.then(response => response.json())
+.then(data => {
+  // Filter out PushEvent types (commits)
+  const commits = data.filter(event => event.type === 'PushEvent');
+  
+  // Total commits
+  const totalCommits = commits.reduce((total, commit) => total + commit.payload.commits.length, 0);
+  const commitCountElement = document.getElementById('commit-count');
+  commitCountElement.innerText = `Total Commits: ${totalCommits}`;
+  
+   // Recent commits with repository name
+   let commitsList = '<h3>Recent Commits:</h3><ul>';
+   commits.slice(0, 4).forEach(event => {
+     // Get repository name from the event
+     const repoName = event.repo.name;
+     
+     event.payload.commits.forEach(commit => {
+       commitsList += `<li><strong>Repo: ${repoName}</strong> - <strong>${event.actor.login}</strong> - ${commit.message} on ${new Date(event.created_at).toLocaleString()}</li>`;
+     });
+   });
+   commitsList += '</ul>';
+   document.getElementById('recent-commits').innerHTML = commitsList;
+ })
+ .catch(error => console.error('Error fetching GitHub data:', error));
+
 });

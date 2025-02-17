@@ -482,7 +482,28 @@ body.dark-mode .read-more {
   color: green;
 }
 
+  /* Base Styles for github-stats */
+  .github-stats {
+    grid-column: span 3;
+    background: #333; /* Dark background by default */
+    color: white;     /* White text in dark mode */
+    padding: 20px;
+    border-radius: 10px;
+    transition: background 0.3s ease, color 0.3s ease; /* Smooth transition for background and text color */
+  }
   
+  .github-stats h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  /* Light Mode Styling */
+body.light-mode .github-stats {
+  background: #ffffff;  /* Set the background to white in light mode */
+  color: #333;           /* Dark text in light mode */
+}
+
   /* Footer Styles */
 footer.footer {
     position: sticky;
