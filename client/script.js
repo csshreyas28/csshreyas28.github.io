@@ -172,7 +172,7 @@ fetch(`https://api.github.com/users/${githubUsername}/events/public`)
   
    // Recent commits with repository name
    let commitsList = '<h3>Recent Commits:</h3><ul>';
-   commits.slice(0, 4).forEach(event => {
+   commits.slice(0, 6).forEach(event => {
      // Get repository name from the event
      const repoName = event.repo.name;
      
