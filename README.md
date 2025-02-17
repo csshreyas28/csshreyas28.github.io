@@ -105,7 +105,7 @@ csshreyas28.github.io/
 - **Contact Form:** Users can submit their name, email, and message. The backend verifies the reCAPTCHA, sanitizes inputs, sends email notifications, and stores the message in MongoDB.
 - **Admin Dashboard:** Secured using JWT authentication. Only authenticated users can view submitted contact messages.
 - **Security Enhancements:** Helmet secures HTTP headers, express-rate-limit protects against DDoS and brute-force attacks, and request size is limited to 10kb.
-- **Environment Variables:** Managed via a `.env` file, with optional validation using Joi (configured in `config.js` if implemented).
+- **Environment Variables:** Managed via a `.env` file.
 
 ---
 
