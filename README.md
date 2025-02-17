@@ -115,6 +115,8 @@ Feel free to reach out to me!
 
 - [[LinkedIn](https://www.linkedin.com/in/csshreyas/)]
 
+- [[Send a message here](https://csshreyas.netlify.app/#contact)]
+
 - [[website link](https://csshreyas.netlify.app/)]
 
 Happy Coding!
