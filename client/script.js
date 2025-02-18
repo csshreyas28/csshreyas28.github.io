@@ -155,8 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
    // GitHub commit stats
-   const githubUsername = 'csshreyas28';  // Replace with your GitHub username
-   const githubRepo = 'csshreyas28.github.io';      // Replace with your repository name
+   const githubUsername = 'csshreyas28';  //  GitHub username
    
 // Fetch public events from GitHub API
 fetch(`https://api.github.com/users/${githubUsername}/events/public`)
