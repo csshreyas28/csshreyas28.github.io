@@ -25,7 +25,9 @@ mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-  .then(() => console.log('✅ MongoDB Connected'))
+  .then(() => {
+    console.log('✅ MongoDB Connected to:', process.env.MONGO_URI);
+  })
   .catch((err) => {
     console.error('❌ MongoDB Connection Error:', err);
     process.exit(1);
@@ -40,10 +42,26 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const apiLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 });
 app.use('/api', apiLimiter);
 
-const contactLimiter = rateLimit({ windowMs: 60 * 1000, max: 5 });
+// Rate Limiting Logs for '/api/contact'
+const contactLimiter = rateLimit({ 
+  windowMs: 60 * 1000, 
+  max: 5, 
+  handler: (req, res) => {
+    console.log(`⚠️ Rate Limiting Triggered for IP: ${req.ip} on /api/contact`);
+    res.status(429).json({ success: false, message: 'Too many requests, please try again later' });
+  }
+});
 app.use('/api/contact', contactLimiter);
 
-const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 5 });
+// Rate Limiting Logs for '/api/admin/login'
+const loginLimiter = rateLimit({ 
+  windowMs: 15 * 60 * 1000, 
+  max: 5, 
+  handler: (req, res) => {
+    console.log(`⚠️ Rate Limiting Triggered for IP: ${req.ip} on /api/admin/login`);
+    res.status(429).json({ success: false, message: 'Too many login attempts, please try again later' });
+  }
+});
 app.use('/api/admin/login', loginLimiter);
 
 // JWT Authentication Middleware
@@ -73,8 +91,8 @@ app.post('/api/admin/login', async (req, res) => {
 
   console.log("🔍 Entered Username:", username);
   console.log("🔍 Entered Password:", password);
-  console.log("🔍 Stored Username:", ADMIN_USERNAME);
-  console.log("🔍 Stored Hashed Password:", ADMIN_PASSWORD);
+  console.log("🔍 Stored Username:", ADMIN_USERNAME); //comment later if not required
+  console.log("🔍 Stored Hashed Password:", ADMIN_PASSWORD); //comment later if not required
 
   if (username !== ADMIN_USERNAME) {
     console.log("❌ Invalid Username");
@@ -96,9 +114,9 @@ app.post('/api/admin/login', async (req, res) => {
 
   // Generate JWT
   const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
+  console.log("🔑 JWT Token Generated:", token);
   res.json({ success: true, token });
 });
-
 
 // Email Transporter
 const transporter = nodemailer.createTransport({
@@ -138,9 +156,12 @@ app.post('/api/contact',
       // Verify reCAPTCHA
       const recaptchaVerificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecret}&response=${recaptchaResponse}`;
       const recaptchaResult = await axios.post(recaptchaVerificationUrl);
+      console.log("🔍 reCAPTCHA Response:", recaptchaResult.data);
       if (!recaptchaResult.data.success) {
+        console.log("❌ Invalid reCAPTCHA");
         return res.status(400).json({ success: false, message: 'Invalid CAPTCHA' });
       }
+
 
       // Send Email to Admin
       const adminMailOptions = {
@@ -175,17 +196,19 @@ app.post('/api/contact',
 // Fetch all contacts (Admin Dashboard - GET Request)
 app.get('/api/contact', authenticateJWT, async (req, res) => {
   try {
-      console.log(`📢 Admin Login Detected! User: ${req.user.username}, Time: ${new Date().toISOString()}`);
-      
-      const contacts = await Contact.find();
-      res.json({ success: true, contacts });
+    console.log(`📢 Admin Login Detected! User: ${req.user.username}, Time: ${new Date().toISOString()}`);
+    
+    const contacts = await Contact.find();
+    console.log(`✅ Fetched Contacts`);
+    // console.log(`✅ Fetched ${contacts.length} Contacts`);
+
+    res.json({ success: true, contacts });
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, message: 'Error fetching contacts' });
+    console.error("❌ Error Fetching Contacts:", error);
+    res.status(500).json({ success: false, message: 'Error fetching contacts' });
   }
 });
 
-  
 // Start the server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
