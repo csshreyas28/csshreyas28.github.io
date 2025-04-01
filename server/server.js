@@ -207,7 +207,9 @@ app.post('/api/contact',
 // Fetch all contacts (Admin Dashboard - GET Request)
 app.get('/api/contact', authenticateJWT, async (req, res) => {
   try {
-    console.log(`📢 Admin Login Detected! User: ${req.user.username}, Time: ${new Date().toISOString()}`);
+    const currentDate = new Date();
+    const istTime = currentDate.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }); // Get current date and time in IST
+    console.log(`📢 Admin Login Detected! User: ${req.user.username}, Time: ${istTime}`); // Display the IST time in the log
     
     const contacts = await Contact.find();
     console.log(`✅ Fetched Contacts`);
