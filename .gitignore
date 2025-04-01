@@ -1,4 +1,5 @@
 client/old.html
 server/node_modules
 server/.env
+server/generateHash.js
 backlog-items.txt

@@ -71,18 +71,34 @@ app.get('/', (_req, res) => {
 app.post('/api/admin/login', async (req, res) => {
   const { username, password } = req.body;
 
+  console.log("🔍 Entered Username:", username);
+  console.log("🔍 Entered Password:", password);
+  console.log("🔍 Stored Username:", ADMIN_USERNAME);
+  console.log("🔍 Stored Hashed Password:", ADMIN_PASSWORD);
+
   if (username !== ADMIN_USERNAME) {
-      return res.status(401).json({ success: false, message: 'Invalid username' });
+    console.log("❌ Invalid Username");
+    return res.status(401).json({ success: false, message: 'Invalid username' });
   }
 
+  console.log("✅ Username Matched");
+
+  // Check if password matches
   const isMatch = bcrypt.compareSync(password, ADMIN_PASSWORD);
+  console.log("🔍 Password Match Result:", isMatch);
+
   if (!isMatch) {
-      return res.status(401).json({ success: false, message: 'Invalid password' });
+    console.log("❌ Invalid Password");
+    return res.status(401).json({ success: false, message: 'Invalid password' });
   }
 
+  console.log("✅ Password Matched");
+
+  // Generate JWT
   const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
   res.json({ success: true, token });
 });
+
 
 // Email Transporter
 const transporter = nodemailer.createTransport({
@@ -158,14 +174,17 @@ app.post('/api/contact',
 
 // Fetch all contacts (Admin Dashboard - GET Request)
 app.get('/api/contact', authenticateJWT, async (req, res) => {
-    try {
+  try {
+      console.log(`📢 Admin Login Detected! User: ${req.user.username}, Time: ${new Date().toISOString()}`);
+      
       const contacts = await Contact.find();
       res.json({ success: true, contacts });
-    } catch (error) {
+  } catch (error) {
       console.error(error);
       res.status(500).json({ success: false, message: 'Error fetching contacts' });
-    }
-  });
+  }
+});
+
   
 // Start the server
 app.listen(PORT, () => {

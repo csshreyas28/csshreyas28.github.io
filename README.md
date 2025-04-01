@@ -81,7 +81,7 @@ csshreyas28.github.io/
    ```
    MONGO_URI=your_mongodb_atlas_connection_string
    JWT_SECRET=your_jwt_secret
-   ADMIN_USERcsshreyas=your_admin_usercsshreyas
+   ADMIN_USERNAME=your_admin_username
    ADMIN_PASSWORD=your_admin_password
    EMAIL_USER=your_email@example.com
    EMAIL_PASS=your_email_password_or_app_password
@@ -89,11 +89,38 @@ csshreyas28.github.io/
    RECAPTCHA_SECRET_KEY=your_recaptcha_secret_key
    PORT=3000
    ```
-4. **Run the backend server locally:**
+4. **Generate a hashed password for the admin account:**
+
+   Since storing plain text passwords in the repository is not secure, the password for the admin account should be hashed before adding it to the `.env` file. To do this, follow these steps:
+
+   Create a file called `generateHash.js` in the `server` folder.
+
+   Add the following code to generate a hashed password using `bcrypt`:
+   ```
+   const bcrypt = require('bcryptjs');
+
+   // Replace 'your_password_here' with your actual password
+   const password = 'your_password_here';
+
+   const hashedPassword = bcrypt.hashSync(password, 10);
+   console.log('Hashed Password:', hashedPassword);
+   ```
+   - Run the generateHash.js file to generate the hashed password:
+   ```
+   node generateHash.js
+   ```
+   - Copy the hashed password from the output and add it to your `.env` file as `ADMIN_PASSWORD`.
+   Example:
+   ```
+   ADMIN_PASSWORD=$2a$10$7vZ3fFcWnsM.ZtxLmUP5B6jLFxQk98IBjjHp5Xh6O9.Yzq//jo8re
+   ```
+
+   The `generateHash.js` is already added to `.gitignore`.
+5. **Run the backend server locally:**
    ```bash
    node server.js
    ```
-5. **Access the API endpoints:**
+6. **Access the API endpoints:**
    - **Contact Form Submission:** `POST /api/contact`
    - **Admin Login:** `POST /api/admin/login`
    - **Fetch Contacts (secured):** `GET /api/contact` (requires JWT token)
