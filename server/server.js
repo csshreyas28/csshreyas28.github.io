@@ -140,6 +140,15 @@ app.post('/api/contact',
     body('recaptchaResponse').notEmpty().withMessage('reCAPTCHA is required')
   ],
   async (req, res) => {
+
+    // Check for dummy request
+    if (req.body.name === 'keep-alive') {
+      console.log("⏳ Dummy request received to keep the server alive");
+
+      // Respond without processing anything (no DB, no email)
+      return res.status(200).json({ success: true, message: 'Server kept alive' });
+    }
+
     // Handle Validation Errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -208,6 +217,24 @@ app.get('/api/contact', authenticateJWT, async (req, res) => {
     res.status(500).json({ success: false, message: 'Error fetching contacts' });
   }
 });
+
+// Send dummy request periodically to keep the server alive; can be later placed in a new file
+const sendDummyRequest = async () => {
+  try {
+    const response = await axios.post(`${process.env.SERVER_URL}/api/contact`, {
+      name: 'keep-alive', // Identifies as a dummy request
+      email: 'dummy@keepalive.com',
+      message: 'This is a dummy request to keep the server alive.',
+      recaptchaResponse: '', // You can leave this empty or put a fake response
+    });
+    console.log('Server kept alive:', response.data.message);
+  } catch (error) {
+    console.error('Error sending dummy request:', error);
+  }
+};
+
+// Send dummy request every hour (3600000 milliseconds)
+setInterval(sendDummyRequest, 3600000); // 1 hour
 
 // Start the server
 app.listen(PORT, () => {

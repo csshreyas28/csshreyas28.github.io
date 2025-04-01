@@ -88,6 +88,7 @@ csshreyas28.github.io/
    EMAIL_RECIPIENT=admin_recipient@example.com
    RECAPTCHA_SECRET_KEY=your_recaptcha_secret_key
    PORT=3000
+   SERVER_URL=http://localhost:3000 #Change it to your deployment URL if required
    ```
 4. **Generate a hashed password for the admin account:**
 
