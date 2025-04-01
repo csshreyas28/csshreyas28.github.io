@@ -13,6 +13,7 @@ const { body, validationResult } = require('express-validator');
 const sanitizeHtml = require('sanitize-html');
 
 const app = express();
+app.set('trust proxy', 1); // ✅ Fix for 'X-Forwarded-For' issue
 app.use(express.json({ limit: '10kb' }));
 app.use(cors());
 app.use(helmet()); // Secure HTTP headers
