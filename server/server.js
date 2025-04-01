@@ -96,6 +96,7 @@ app.post('/api/admin/login', async (req, res) => {
 
   if (username !== ADMIN_USERNAME) {
     console.log("❌ Invalid Username");
+    console.log("👨🏻‍💻👨🏻‍💻👨🏻‍💻👨🏻‍💻👨🏻‍💻👨🏻‍💻👨🏻‍💻👨🏻‍💻👨🏻‍💻👨🏻‍💻");
     return res.status(401).json({ success: false, message: 'Invalid username' });
   }
 
@@ -107,6 +108,7 @@ app.post('/api/admin/login', async (req, res) => {
 
   if (!isMatch) {
     console.log("❌ Invalid Password");
+    console.log("👨🏻‍💻👨🏻‍💻👨🏻‍💻👨🏻‍💻👨🏻‍💻👨🏻‍💻👨🏻‍💻👨🏻‍💻👨🏻‍💻👨🏻‍💻");
     return res.status(401).json({ success: false, message: 'Invalid password' });
   }
 
