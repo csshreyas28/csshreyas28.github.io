@@ -188,7 +188,7 @@ app.post('/api/contact',
         from: process.env.EMAIL_USER,
         to: email,
         subject: 'Thank You for Contacting Shreyas!',
-        text: `Hi ${name},\n\nThank you for reaching out to me. I have received your message and will get back to you soon.\n\nRegards,\n\nShreyas C.S.\n\nYour Message:\n${message}`,
+        text: `Hi ${name},\n\nThank you for reaching out to me. I have received your message and will get back to you soon.\n\nRegards,\n\Shreyas C S\n\nYour Message:\n${message}`,
       };
       await transporter.sendMail(userMailOptions);
 
@@ -225,22 +225,22 @@ app.get('/api/contact', authenticateJWT, async (req, res) => {
 // Send dummy request periodically to keep the server alive; can be later placed in a new file
 const sendDummyRequest = async () => {
   try {
+    console.log("⏳ Sending dummy keep-alive request...");
     const response = await axios.post(`${process.env.SERVER_URL}/api/contact`, {
-      name: 'keep-alive', // Identifies as a dummy request
+      name: 'keep-alive',
       email: 'dummy@keepalive.com',
       message: 'This is a dummy request to keep the server alive.',
-      recaptchaResponse: '', // You can leave this empty or put a fake response
+      recaptchaResponse: '', 
     });
-    console.log('Server kept alive:', response.data.message);
+    console.log('✅ Server kept alive:', response.data.message);
   } catch (error) {
-    console.error('Error sending dummy request:', error);
+    console.error('❌ Error sending dummy request:', error.response?.data || error.message);
   }
 };
-
-// Send dummy request every hour (3600000 milliseconds)
-setInterval(sendDummyRequest, 3600000); // 1 hour
 
 // Start the server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
+  // Send dummy request every hour (3600000 milliseconds)
+  setInterval(sendDummyRequest, 60000); // 1 hour
 });
