@@ -167,7 +167,7 @@ app.post('/api/contact',
       // Verify reCAPTCHA
       const recaptchaVerificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecret}&response=${recaptchaResponse}`;
       const recaptchaResult = await axios.post(recaptchaVerificationUrl);
-      console.log("🔍 reCAPTCHA Response:", recaptchaResult.data);
+      // console.log("🔍 reCAPTCHA Response:", recaptchaResult.data);
       if (!recaptchaResult.data.success) {
         console.log("❌ Invalid reCAPTCHA");
         return res.status(400).json({ success: false, message: 'Invalid CAPTCHA' });
@@ -242,5 +242,5 @@ const sendDummyRequest = async () => {
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   // Send dummy request every hour (3600000 milliseconds)
-  setInterval(sendDummyRequest, 60000); // 1 hour
+  setInterval(sendDummyRequest, 3600000); // 1 hour
 });
