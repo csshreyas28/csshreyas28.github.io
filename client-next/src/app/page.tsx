@@ -10,49 +10,49 @@ import Contact from "./components/Contact"
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 dark:from-zinc-900 dark:to-black p-4">
-      <div className="bento-grid">
+    <main>
+      <div>
 
         {/* Top Greeting */}
-        <div className="col-span-1 lg:col-span-2 glass-card min-h-[150px]">
+        <div>
           <Hello />
         </div>
 
         {/* Socials */}
-        <div className="col-span-1 lg:col-span-1 glass-card">
+        <div>
           <GitHub />
         </div>
-        <div className="col-span-1 lg:col-span-1 glass-card">
+        <div>
           <LinkedIn />
         </div>
 
-        {/* About (wide card) */}
-        <div className="col-span-1 lg:col-span-2 glass-card">
+        {/* About */}
+        <div>
           <AboutCard />
         </div>
 
-        {/* Skills (wide card) */}
-        <div className="col-span-1 lg:col-span-2 glass-card">
+        {/* Skills */}
+        <div>
           <Skills />
         </div>
 
         {/* GitHub Stats */}
-        <div className="glass-card">
+        <div>
           <GitHubStats />
         </div>
 
         {/* Location */}
-        <div className="glass-card">
+        <div>
           <Location />
         </div>
 
-        {/* Contact (wide card) */}
-        <div className="col-span-1 lg:col-span-2 glass-card">
+        {/* Contact */}
+        <div>
           <Contact />
         </div>
 
-        {/* Projects (full width) */}
-        <div className="col-span-1 lg:col-span-4 glass-card min-h-[10px]">
+        {/* Projects */}
+        <div>
           <Projects />
         </div>
 
