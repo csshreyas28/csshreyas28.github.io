@@ -1,10 +1,8 @@
 # My Portfolio Website
 
-# Please visit [csshreyas.netlify.app](https://csshreyas.netlify.app/)
+Please visit [csshreyas.netlify.app](https://csshreyas.netlify.app/)
 
-# My Portfolio Website
-
-Welcome to my portfolio website! This repo contains the source code for my personal website, including both the frontend and backend components. The frontend is hosted on Netlify, and the backend (built with Node.js and Express) is hosted on Render.
+Welcome to my portfolio website! This repo contains the source code for my personal website, including both the frontend and backend components. The frontend is a **Next.js** app hosted on Netlify, and the backend (Node.js and Express) is hosted on Render.
 
 ---
 
@@ -12,6 +10,7 @@ Welcome to my portfolio website! This repo contains the source code for my perso
 
 - **Website (Frontend):** [csshreyas.netlify.app](https://csshreyas.netlify.app/)
 - **Backend API:** [https://csshreyas-backend.onrender.com](https://csshreyas-backend.onrender.com)
+- **Admin Dashboard:** [/admin](https://csshreyas.netlify.app/admin) (requires credentials)
 
 ---
 
@@ -19,132 +18,102 @@ Welcome to my portfolio website! This repo contains the source code for my perso
 
 ```
 csshreyas28.github.io/
-├── client/              # Frontend code (HTML, CSS, JavaScript)
-│   ├── index.html
-│   ├── script.js
-│   ├── styles.css
-│   └── images/
-├── server/              # Backend code (Node.js/Express)
-│   ├── server.js        # Main server file
-│   ├── models/          # Mongoose models (e.g., Contact.js)
-│   └── routes/          # API routes (e.g., contact.js)
-└── README.md
+├── frontend/            # Next.js frontend (App Router, Tailwind CSS)
+│   ├── src/
+│   │   ├── app/         # Pages (home, admin)
+│   │   ├── components/  # Bento grid UI components
+│   │   └── content/     # Profile, projects, skills data
+│   └── public/images/   # Portfolio & project images
+├── client/              # Legacy static frontend (deprecated)
+├── server/              # Backend (Node.js/Express)
+│   ├── server.js
+│   ├── models/
+│   └── routes/
+└── netlify.toml         # Netlify deployment config
 ```
 
 ---
 
-## Features and Technologies Used
+## Features
 
-### Frontend
-- **HTML, CSS, JavaScript**
-- Contact form to submit messages
+### Frontend (Next.js)
+- Modern **bento grid** layout with dark theme and lime accent
+- Featured projects showcase with nested grid
+- Contact form with Google reCAPTCHA v3
+- Live GitHub commit activity
+- Interactive location map (Leaflet)
+- Admin dashboard at `/admin`
 
-### Backend
-- **Node.js & Express:** RESTful API to handle contact form submissions
-- **MongoDB Atlas:** Database for storing contact messages
-- **Nodemailer:** Sends email notifications on form submission (both to admin and as a confirmation to the user)
-- **reCAPTCHA Integration:** Prevents spam submissions via Google reCAPTCHA
-- **JWT Authentication:** Secures the admin dashboard for viewing contact submissions
-- **Security Enhancements:**
-  - **Helmet:** Sets secure HTTP headers
-  - **Rate Limiting:** Limits requests to API endpoints to prevent abuse
-  - **Input Validation & Sanitization:** Uses express-validator and sanitize-html to protect against XSS and injection attacks
-  - **Request Body Size Limit:** Limits JSON payloads to 10kb
-
-### Deployment
-- **Frontend:** Deployed on Netlify
-- **Backend:** Deployed on Render
+### Backend (unchanged)
+- **Node.js & Express** REST API
+- **MongoDB Atlas** for contact messages
+- **Nodemailer** email notifications
+- **JWT** admin authentication
+- **reCAPTCHA**, rate limiting, input sanitization
 
 ---
 
 ## Setup and Installation
 
 ### Frontend
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/csshreyas28/csshreyas28.github.io
-   ```
-2. **Navigate to the `client` folder** and open `index.html` in your browser to view the website locally.
+
+```bash
+cd frontend
+npm install
+cp .env.example .env.local   # optional — defaults are set
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+**Build for production:**
+
+```bash
+npm run build
+npm start
+```
 
 ### Backend
-1. **Navigate to the `server` folder:**
+
+1. Navigate to the `server` folder:
    ```bash
    cd server
    ```
-2. **Install dependencies:**
+2. Install dependencies:
    ```bash
    npm install
    ```
-3. **Set up your environment variables:**
-
-   Create a `.env` file in the `server` folder with the following variables:
+3. Create a `.env` file with:
    ```
    MONGO_URI=your_mongodb_atlas_connection_string
    JWT_SECRET=your_jwt_secret
    ADMIN_USERNAME=your_admin_username
-   ADMIN_PASSWORD=your_admin_password
+   ADMIN_PASSWORD=your_bcrypt_hashed_password
    EMAIL_USER=your_email@example.com
-   EMAIL_PASS=your_email_password_or_app_password
+   EMAIL_PASS=your_email_app_password
    EMAIL_RECIPIENT=admin_recipient@example.com
    RECAPTCHA_SECRET_KEY=your_recaptcha_secret_key
    PORT=3000
-   SERVER_URL=http://localhost:3000 #Change it to your deployment URL if required
+   SERVER_URL=http://localhost:3000
    ```
-4. **Generate a hashed password for the admin account:**
-
-   Since storing plain text passwords in the repository is not secure, the password for the admin account should be hashed before adding it to the `.env` file. To do this, follow these steps:
-
-   Create a file called `generateHash.js` in the `server` folder.
-
-   Add the following code to generate a hashed password using `bcrypt`:
-   ```
-   const bcrypt = require('bcryptjs');
-
-   // Replace 'your_password_here' with your actual password
-   const password = 'your_password_here';
-
-   const hashedPassword = bcrypt.hashSync(password, 10);
-   console.log('Hashed Password:', hashedPassword);
-   ```
-   - Run the generateHash.js file to generate the hashed password:
-   ```
-   node generateHash.js
-   ```
-   - Copy the hashed password from the output and add it to your `.env` file as `ADMIN_PASSWORD`.
-   Example:
-   ```
-   ADMIN_PASSWORD=$2a$10$7vZ3fFcWnsM.ZtxLmUP5B6jLFxQk98IBjjHp5Xh6O9.Yzq//jo8re
-   ```
-
-   The `generateHash.js` is already added to `.gitignore`.
-5. **Run the backend server locally:**
+4. Run the server:
    ```bash
    node server.js
    ```
-6. **Access the API endpoints:**
-   - **Contact Form Submission:** `POST /api/contact`
-   - **Admin Login:** `POST /api/admin/login`
-   - **Fetch Contacts (secured):** `GET /api/contact` (requires JWT token)
 
 ---
 
-## Additional Information
+## Deployment
 
-- **Contact Form:** Users can submit their name, email, and message. The backend verifies the reCAPTCHA, sanitizes inputs, sends email notifications, and stores the message in MongoDB.
-- **Admin Dashboard:** Secured using JWT authentication. Only authenticated users can view submitted contact messages.
-- **Security Enhancements:** Helmet secures HTTP headers, express-rate-limit protects against DDoS and brute-force attacks, and request size is limited to 10kb.
-- **Environment Variables:** Managed via a `.env` file.
+- **Frontend:** Deploy the `frontend/` directory on Netlify (see `netlify.toml`)
+- **Backend:** Deploy `server/` on Render with environment variables configured
 
 ---
 
 ## Contact
 
-Feel free to reach out to me!
-
-- [[LinkedIn](https://www.linkedin.com/in/csshreyas/)]
-
-- [[Send a message here](https://csshreyas.netlify.app/#contact)]
-
-- [[website link](https://csshreyas.netlify.app/)]
+- [LinkedIn](https://www.linkedin.com/in/csshreyas/)
+- [GitHub](https://github.com/csshreyas28)
+- [Send a message](https://csshreyas.netlify.app/#contact)
 
 Happy Coding!

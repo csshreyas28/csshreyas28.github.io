@@ -3,3 +3,8 @@ server/node_modules
 server/.env
 server/generateHash.js
 backlog-items.txt
+frontend/node_modules
+frontend/.next
+frontend/.env
+frontend/.env.local
+server/.env.local
