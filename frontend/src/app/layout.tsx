@@ -36,9 +36,9 @@ export default function RootLayout({
       >
         <ThemeProvider>{children}</ThemeProvider>
 
-        <Script
+                <Script
           src={`https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`}
-          strategy="lazyOnload"
+          strategy="afterInteractive"
         />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}

@@ -7,6 +7,7 @@ declare global {
   interface Window {
     grecaptcha: {
       execute: (siteKey: string, options: { action: string }) => Promise<string>;
+      ready: (callback: () => void) => void;
     };
   }
 }
@@ -36,6 +37,11 @@ export function ContactForm() {
       if (!window.grecaptcha?.execute) {
         throw new Error("Verification is still loading. Please try again in a moment.");
       }
+
+      await new Promise<void>((resolve, reject) => {
+        window.grecaptcha.ready(resolve);
+        setTimeout(reject, 10000, new Error("ReCAPTCHA timed out. Please refresh and try again."));
+      });
 
       const recaptchaResponse = await window.grecaptcha.execute(
         RECAPTCHA_SITE_KEY,
